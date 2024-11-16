@@ -13,9 +13,12 @@ interface Product {
   id: number;
   name: string;
   description: string;
+  code: string;
   price: number;
   stock: number;
   sales: number;
+  image: string;
+  category_id: number;
   category: Category;
 }
 
@@ -54,7 +57,7 @@ export default function ProductsPage() {
     try {
       const queryParams = new URLSearchParams({
         ...(search && { search }),
-        ...(category && { category }),
+        ...(category && { category: category }),
         ...(orderBy && { order_by: orderBy }),
         ...(order && { order }),
         page: page.toString(),
@@ -100,48 +103,6 @@ export default function ProductsPage() {
     }
   };
 
-  const handleAddProduct = async (product: { name: string; price: number }) => {
-    try {
-      await apiFetch('/products/', {
-        method: 'POST',
-        body: JSON.stringify(product),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      fetchProducts();
-      setIsModalOpen(false); 
-    } catch (error) {
-      console.error('Failed to add product', error);
-    }
-  };
-
-  const handleUpdateProduct = async (updatedProduct: Product) => {
-    try {
-      await apiFetch(`/products/${updatedProduct.id}/`, {
-        method: 'PUT',
-        body: JSON.stringify(updatedProduct),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      fetchProducts();
-      setSelectedProduct(null);
-    } catch (error) {
-      console.error('Failed to update product', error);
-    }
-  };
-
-  const handleDeleteProduct = async (productId: number) => {
-    try {
-      await apiFetch(`/products/${productId}/`, { method: 'DELETE' });
-      fetchProducts();
-      setSelectedProduct(null);
-    } catch (error) {
-      console.error('Failed to delete product', error);
-    }
-  };
-
   if (!authContext?.user) {
     return null;
   }
@@ -176,12 +137,11 @@ export default function ProductsPage() {
             onClick={fetchProducts}
           >
             <SearchIcon className="text-white" />
-            <span className="hidden md:inline-block ml-2">Search</span> {/* Hide on small screens */}
+            <span className="hidden md:inline-block ml-2">Search</span>
           </button>
 
         </div>
 
-        {/* Add Button Positioned Absolutely */}
         <button
           className="absolute right-0 bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition h-11 flex items-center justify-center"
           onClick={() => setIsModalOpen(true)}
@@ -199,16 +159,15 @@ export default function ProductsPage() {
         />
       )}
 
-      {/* Product Details Modal */}
       {selectedProduct && (
         <ProductDetailsModal
           product={selectedProduct}
           categories={categories}
-          onUpdate={handleUpdateProduct}
-          onDelete={handleDeleteProduct}
+          onUpdateComplete={fetchProducts}
           onClose={() => setSelectedProduct(null)}
         />
       )}
+
 
       <hr className="border-gray-600 mt-4 mb-6" />
 
@@ -243,44 +202,59 @@ export default function ProductsPage() {
       ) : (
         <div className="overflow-x-auto rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
           <table className="min-w-full border-collapse text-left text-gray-300">
-            <thead className="bg-gray-700">
-              <tr>
-                {['id', 'name', 'description', 'price', 'stock', 'sales', 'category'].map((col) => (
-                  <th
-                    key={col}
-                    className={`border border-gray-600 px-4 py-2 cursor-pointer ${
-                      orderBy === col ? 'bg-blue-600 text-white' : ''
-                    }`}
-                    onClick={() => handleHeaderClick(col)}
-                  >
-                    {col.charAt(0).toUpperCase() + col.slice(1)}{' '}
-                    {orderBy === col && (order === 'asc' ? '▲' : '▼')}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {products.map((product, index) => (
-                <tr
-                  key={product.id}
-                  className={`hover:bg-gray-700 transition cursor-pointer ${
-                    index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900'
-                  }`}
-                  onClick={() => setSelectedProduct(product)}
+          <thead className="bg-gray-700">
+            <tr>
+              {['image', 'name', 'description', 'price', 'stock', 'sales', 'code', 'category'].map((col) => (
+                <th
+                  key={col}
+                  className={`border border-gray-600 px-4 py-2 ${
+                    col !== 'image' ? 'cursor-pointer' : ''
+                  } ${orderBy === col ? 'bg-blue-600 text-white' : ''}`}
+                  onClick={col !== 'image' ? () => handleHeaderClick(col) : undefined} 
                 >
-                  <td className="border border-gray-600 px-4 py-2">{product.id}</td>
-                  <td className="border border-gray-600 px-4 py-2">{product.name}</td>
-                  <td className="border border-gray-600 px-4 py-2">{product.description}</td>
-                  <td className="border border-gray-600 px-4 py-2">
-                    ${product.price.toFixed(2)}
-                  </td>
-                  <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
-                  <td className="border border-gray-600 px-4 py-2">{product.sales}</td>
-                  <td className="border border-gray-600 px-4 py-2">{product.category.name}</td>
-                </tr>
+                  {col.charAt(0).toUpperCase() + col.slice(1)}{' '}
+                  {orderBy === col && col !== 'image' && (order === 'asc' ? '▲' : '▼')}
+                </th>
               ))}
-            </tbody>
-          </table>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((product, index) => (
+              <tr
+                key={product.id}
+                className={`hover:bg-gray-700 transition cursor-pointer ${
+                  index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900'
+                }`}
+                onClick={() => setSelectedProduct(product)}
+              >
+                <td className="border border-gray-600 px-4 py-2 text-center">
+                  {product.image ? (
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-16 h-16 object-cover rounded-md mx-auto"
+                    />
+                  ) : (
+                    <img
+                      src="/default-placeholder.png"
+                      alt="Default"
+                      className="w-16 h-16 object-cover rounded-md mx-auto"
+                    />
+                  )}
+                </td>
+                <td className="border border-gray-600 px-4 py-2">{product.name}</td>
+                <td className="border border-gray-600 px-4 py-2">{product.description}</td>
+                <td className="border border-gray-600 px-4 py-2">
+                  ${product.price.toFixed(2)}
+                </td>
+                <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
+                <td className="border border-gray-600 px-4 py-2">{product.sales}</td>
+                <td className="border border-gray-600 px-4 py-2">{product.code}</td>
+                <td className="border border-gray-600 px-4 py-2">{product.category.name}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         </div>
       )}
       {(products.length != 0) ? (

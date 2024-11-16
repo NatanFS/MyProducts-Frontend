@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import apiFetch from '../utils/api';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface CategorySelectorProps {
   categories: { id: number; name: string }[];
@@ -12,7 +13,7 @@ export default function CategorySelector({
   categories,
   selectedCategoryId,
   setCategoryId,
-  setCategories
+  setCategories,
 }: CategorySelectorProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -27,16 +28,30 @@ export default function CategorySelector({
           'Content-Type': 'application/json',
         },
       });
-  
+
       setCategories((prevCategories) => [...prevCategories, addedCategory]);
       setCategoryId(addedCategory.id);
       setSearchTerm(addedCategory.name);
       setIsDropdownOpen(false);
-  
+
       return addedCategory;
     } catch (error: any) {
       console.error('Error adding category:', error);
       throw error;
+    }
+  };
+
+  const handleDeleteCategory = async (id: number) => {
+    try {
+      await apiFetch(`/products/categories/${id}/`, {
+        method: 'DELETE',
+      });
+      setCategories((prevCategories) => prevCategories.filter((category) => category.id !== id));
+      if (selectedCategoryId === id) {
+        setCategoryId('');
+      }
+    } catch (error: any) {
+      console.error('Error deleting category:', error);
     }
   };
 
@@ -73,16 +88,29 @@ export default function CategorySelector({
             {filteredCategories.map((category) => (
               <div
                 key={category.id}
-                className={`px-4 py-2 cursor-pointer hover:bg-gray-700 ${
-                  selectedCategoryId === category.id ? 'bg-gray-700' : ''
-                }`}
-                onClick={() => {
-                  setCategoryId(category.id);
-                  setSearchTerm(category.name);
-                  setIsDropdownOpen(false);
-                }}
+                className="flex items-center justify-between px-4 py-2 hover:bg-gray-700"
               >
-                {category.name}
+                <div
+                  className={`cursor-pointer flex-1 ${
+                    selectedCategoryId === category.id ? '' : ''
+                  }`}
+                  onClick={() => {
+                    setCategoryId(category.id);
+                    setSearchTerm(category.name);
+                    setIsDropdownOpen(false);
+                  }}
+                >
+                  {category.name}
+                </div>
+                <button
+                  className="ml-2 text-red-500 hover:text-red-700"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteCategory(category.id);
+                  }}
+                >
+                  <DeleteIcon />
+                </button>
               </div>
             ))}
             {!filteredCategories.length && (

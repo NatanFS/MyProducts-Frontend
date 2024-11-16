@@ -34,7 +34,7 @@ export default function Sidebar() {
   return (
     <>
       <button
-        className="fixed top-4 left-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg md:hidden transition-transform duration-300"
+        className="fixed top-4 left-4 z-50 bg-blue-600 text-white p-3 rounded-full shadow-lg lg:hidden transition-transform duration-300"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
         aria-controls="sidebar"
@@ -52,7 +52,7 @@ export default function Sidebar() {
         id="sidebar"
         className={`fixed top-0 left-0 h-full w-64 bg-gradient-to-b from-gray-800 to-gray-900 text-white shadow-gray-950 shadow-xl transition-transform duration-300 z-40 ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
-        } md:translate-x-0`}
+        } lg:translate-x-0`}
       >
         <div className="flex items-center justify-center h-20 bg-gray-900 border-b border-gray-700">
           <h1 className="text-2xl font-bold tracking-wide">MyProducts</h1>

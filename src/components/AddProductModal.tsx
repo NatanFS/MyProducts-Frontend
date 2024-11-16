@@ -8,7 +8,7 @@ interface AddProductModalProps {
   onCancel: () => void;
   categories: { id: number; name: string }[];
   setCategories: React.Dispatch<React.SetStateAction<{ id: number; name: string }[]>>;
-  fetchProducts: () => void; 
+  fetchProducts: () => void;
 }
 
 export default function AddProductModal({
@@ -21,7 +21,7 @@ export default function AddProductModal({
   const [price, setPrice] = useState<number | ''>('');
   const [description, setDescription] = useState('');
   const [stock, setStock] = useState<number | ''>('');
-  const [sales, setSales] = useState<number | ''>(0);
+  const [sales, setSales] = useState<number | ''>('');
   const [image, setImage] = useState<File | null>(null);
   const [code, setCode] = useState('');
   const [categoryId, setCategoryId] = useState<number | ''>('');
@@ -37,7 +37,7 @@ export default function AddProductModal({
     if (!price) errors.price = 'Price is required.';
     if (!description) errors.description = 'Description is required.';
     if (!stock) errors.stock = 'Stock is required.';
-    if (!sales && sales !== 0) errors.sales = 'Sales is required.';
+    if (!sales) errors.sales = 'Sales is required.';
     if (!code) errors.code = 'Product code is required.';
     if (!categoryId) errors.category_id = 'Category is required.';
 
@@ -69,7 +69,7 @@ export default function AddProductModal({
       });
 
       fetchProducts();
-      onCancel(); 
+      onCancel();
     } catch (error: any) {
       setGlobalError('Failed to save product. Please try again.');
       console.error(error);
@@ -79,30 +79,37 @@ export default function AddProductModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-96">
-        <h2 className="text-2xl font-bold mb-4 text-white">Add New Product</h2>
-        <form
-          onSubmit={handleSubmit}
-        >
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center overflow-y-auto">
+      <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-[600px]">
+        <h2 className="text-2xl font-bold mb-4 text-white text-center">Add Product</h2>
+        <form onSubmit={handleSubmit}>
           {globalError && (
             <p className="text-red-500 text-sm text-center mb-4">{globalError}</p>
           )}
 
-          <div>
-            <input
-              type="text"
-              placeholder="Product Name"
-              className={`block w-full mb-3 bg-gray-700 border ${
-                fieldErrors.name ? 'border-red-500' : 'border-gray-600'
-              } rounded-lg px-4 py-2 text-gray-300`}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-            {fieldErrors.name && <p className="text-red-500 text-sm">{fieldErrors.name}</p>}
-          </div>
+          <label htmlFor="product-name" className="block text-sm font-medium text-gray-300 mb-1">
+            Product Name
+          </label>
+          <input
+            id="product-name"
+            type="text"
+            placeholder="Product Name"
+            className={`block w-full mb-3 bg-gray-700 border ${
+              fieldErrors.name ? 'border-red-500' : 'border-gray-600'
+            } rounded-lg px-4 py-2 text-gray-300`}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          {fieldErrors.name && <p className="text-red-500 text-sm mb-2">{fieldErrors.name}</p>}
 
+          <label
+            htmlFor="product-description"
+            className="block text-sm font-medium text-gray-300 mb-1"
+          >
+            Description
+          </label>
           <textarea
+            id="product-description"
             placeholder="Description"
             className={`block w-full mb-3 bg-gray-700 border ${
               fieldErrors.description ? 'border-red-500' : 'border-gray-600'
@@ -111,10 +118,14 @@ export default function AddProductModal({
             onChange={(e) => setDescription(e.target.value)}
           />
           {fieldErrors.description && (
-            <p className="text-red-500 text-sm">{fieldErrors.description}</p>
+            <p className="text-red-500 text-sm mb-2">{fieldErrors.description}</p>
           )}
 
+          <label htmlFor="product-price" className="block text-sm font-medium text-gray-300 mb-1">
+            Price
+          </label>
           <input
+            id="product-price"
             type="number"
             placeholder="Price"
             className={`block w-full mb-3 bg-gray-700 border ${
@@ -123,9 +134,13 @@ export default function AddProductModal({
             value={price}
             onChange={(e) => setPrice(Number(e.target.value) || '')}
           />
-          {fieldErrors.price && <p className="text-red-500 text-sm">{fieldErrors.price}</p>}
+          {fieldErrors.price && <p className="text-red-500 text-sm mb-2">{fieldErrors.price}</p>}
 
+          <label htmlFor="product-stock" className="block text-sm font-medium text-gray-300 mb-1">
+            Stock
+          </label>
           <input
+            id="product-stock"
             type="number"
             placeholder="Stock"
             className={`block w-full mb-3 bg-gray-700 border ${
@@ -134,9 +149,28 @@ export default function AddProductModal({
             value={stock}
             onChange={(e) => setStock(Number(e.target.value) || '')}
           />
-          {fieldErrors.stock && <p className="text-red-500 text-sm">{fieldErrors.stock}</p>}
+          {fieldErrors.stock && <p className="text-red-500 text-sm mb-2">{fieldErrors.stock}</p>}
 
+          <label htmlFor="product-sales" className="block text-sm font-medium text-gray-300 mb-1">
+            Sales
+          </label>
           <input
+            id="product-sales"
+            type="number"
+            placeholder="Sales"
+            className={`block w-full mb-3 bg-gray-700 border ${
+              fieldErrors.sales ? 'border-red-500' : 'border-gray-600'
+            } rounded-lg px-4 py-2 text-gray-300`}
+            value={sales}
+            onChange={(e) => setSales(Number(e.target.value) || '')}
+          />
+          {fieldErrors.sales && <p className="text-red-500 text-sm mb-2">{fieldErrors.sales}</p>}
+
+          <label htmlFor="product-code" className="block text-sm font-medium text-gray-300 mb-1">
+            Product Code (SKU)
+          </label>
+          <input
+            id="product-code"
             type="text"
             placeholder="Product Code (SKU)"
             className={`block w-full mb-3 bg-gray-700 border ${
@@ -145,42 +179,48 @@ export default function AddProductModal({
             value={code}
             onChange={(e) => setCode(e.target.value)}
           />
-          {fieldErrors.code && <p className="text-red-500 text-sm">{fieldErrors.code}</p>}
+          {fieldErrors.code && <p className="text-red-500 text-sm mb-2">{fieldErrors.code}</p>}
 
+          <label htmlFor="product-category" className="block text-sm font-medium text-gray-300 mb-1">
+            Category
+          </label>
           <CategorySelector
-                categories={categories}
-                selectedCategoryId={categoryId}
-                setCategories={setCategories}
-                setCategoryId={setCategoryId}
-            />
-
-        <input
-            type="file"
-            id="file-upload"
-            className="hidden "
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+            categories={categories}
+            selectedCategoryId={categoryId}
+            setCategories={setCategories}
+            setCategoryId={setCategoryId}
           />
 
-          <label
-            htmlFor="file-upload"
-            className="block w-full mt-3 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 cursor-pointer hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-          >
-            <span className="flex justify-center items-center gap-2">
-              <span className="text-sm">Click to upload an image</span>
-              <span className="text-sm text-gray-400">{image ? image.name : ''}</span>
-            </span>
+          <label htmlFor="product-image" className="block text-sm font-medium text-gray-300 mb-1 mt-3">
+            Product Image
           </label>
-
-          {image && image.type.startsWith('image/') && (
-            <div className="flex justify-center my-4">
-              <img
-                src={URL.createObjectURL(image)}
-                alt="Image preview"
-                className="w-32 h-32 object-cover rounded-lg"
-              />
-            </div>
-          )}    
+          <div className="relative">
+            <input
+              id="product-image"
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files ? e.target.files[0] : null)}
+            />
+            <label
+              htmlFor="product-image"
+              className="block w-full mt-4 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 cursor-pointer hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+            >
+              <div className="flex justify-center items-center gap-2">
+                <div className="flex justify-center my-4">
+                  {image ? (
+                    <img
+                      src={URL.createObjectURL(image)}
+                      alt="Image preview"
+                      className="w-32 h-32 object-cover rounded-lg"
+                    />
+                  ) : (
+                    <span className="text-gray-500 text-sm">Add a product image</span>
+                  )}
+                </div>
+              </div>
+            </label>
+          </div>
 
           <button
             type="submit"
