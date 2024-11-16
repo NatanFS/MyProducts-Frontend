@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import apiFetch from '../utils/api';
 import CategorySelector from './CategorySelector';
+import { NumericFormat } from 'react-number-format';
 
 interface ProductDetailsModalProps {
   product: {
@@ -73,14 +74,13 @@ export default function ProductDetailsModal({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center overflow-y-auto">
-      <div className="relative bg-gray-800 rounded-lg shadow-lg w-full max-w-xl mx-auto">
-        <div className="sticky top-0 bg-gray-800 p-4 border-b border-gray-700">
-          <h2 className="text-xl font-bold text-white">Edit Product</h2>
+    <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center overflow-y-auto ">
+      <div className="relative bg-gray-800 shadow-lg w-full max-w-xl mx-auto rounded-lg">
+        <div className="sticky top-0 bg-gray-800 p-4 border-b border-gray-700 rounded-lg  ">
+          <h2 className="text-xl font-bold text-white text-center">Edit Product</h2>
         </div>
         <div className="p-4 overflow-y-auto max-h-[70vh]">
           <form onSubmit={(e) => e.preventDefault()}>
-            {/* Form fields */}
             <label className="block text-sm font-medium text-gray-300 mb-1">Product Name</label>
             <input
               type="text"
@@ -97,13 +97,19 @@ export default function ProductDetailsModal({
             className="block w-full mb-3 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
           />
           <label className="block text-sm font-medium text-gray-300 mb-1">Price</label>
-          <input
-            type="number"
-            placeholder="Price"
+          <NumericFormat
             value={updatedProduct.price}
-            onChange={(e) => handleChange('price', parseFloat(e.target.value))}
+            thousandSeparator=","
+            decimalSeparator="."
+            decimalScale={2}
+            fixedDecimalScale
+            prefix="$"
+            onValueChange={(values) => {
+                const { floatValue } = values;
+                handleChange('price', floatValue || ''); 
+            }}
             className="block w-full mb-3 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
-          />
+            />
           <label className="block text-sm font-medium text-gray-300 mb-1">Stock</label>
           <input
             type="number"

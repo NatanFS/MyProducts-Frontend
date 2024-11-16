@@ -69,7 +69,6 @@ export default function RegisterPage() {
           <h1 className="text-2xl font-bold tracking-wide">Register - MyProducts</h1>
         </div>
 
-        {/* Global and field-specific error messages */}
         {globalError && (
           <p className="text-red-500 text-sm text-center">{globalError}</p>
         )}
@@ -78,7 +77,6 @@ export default function RegisterPage() {
           <p className="text-green-500 text-sm text-center">{successMessage}</p>
         )}
 
-        {/* Profile Image (Positioned at the top of the form) */}
         <div className="flex justify-center mb-4">
           <label
             htmlFor="profileImage"
@@ -103,7 +101,6 @@ export default function RegisterPage() {
           </label>
         </div>
 
-        {/* Form Fields */}
         <div>
           <input
             type="text"

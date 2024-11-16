@@ -15,7 +15,10 @@
     "@mui/material": "^6.1.7",
     "next": "15.0.3",
     "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react-dom": "^18.3.1",
+    "react-input-mask": "^2.0.4",
+    "react-input-mask-next": "^3.0.0-alpha.12",
+    "react-number-format": "^5.4.2"
   },
   "devDependencies": {
     "@types/node": "^20",
