@@ -69,6 +69,7 @@ export default function RegisterPage() {
           <h1 className="text-2xl font-bold tracking-wide">Register - MyProducts</h1>
         </div>
 
+        {/* Global and field-specific error messages */}
         {globalError && (
           <p className="text-red-500 text-sm text-center">{globalError}</p>
         )}
@@ -77,6 +78,32 @@ export default function RegisterPage() {
           <p className="text-green-500 text-sm text-center">{successMessage}</p>
         )}
 
+        {/* Profile Image (Positioned at the top of the form) */}
+        <div className="flex justify-center mb-4">
+          <label
+            htmlFor="profileImage"
+            className="cursor-pointer relative w-32 h-32 rounded-full border-4 border-gray-600 flex items-center justify-center bg-gray-700 hover:bg-gray-600 transition duration-200"
+          >
+            {profileImage ? (
+              <img
+                src={URL.createObjectURL(profileImage)}
+                alt="Profile Preview"
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <span className="text-gray-400 text-center">Upload profile image</span>
+            )}
+            <input
+              id="profileImage"
+              type="file"
+              accept="image/*"
+              className="absolute inset-0 opacity-0"
+              onChange={handleFileChange}
+            />
+          </label>
+        </div>
+
+        {/* Form Fields */}
         <div>
           <input
             type="text"
@@ -127,29 +154,6 @@ export default function RegisterPage() {
             <p className="text-red-500 text-sm mt-1">{fieldErrors.password}</p>
           )}
         </div>
-
-        <div>
-            <label
-                htmlFor="profileImage"
-                className="flex items-center justify-center border-dashed border-2 border-gray-600 p-4 w-full rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-800 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            >
-                {profileImage ? (
-                <p className="text-sm text-gray-400">{profileImage.name}</p>
-                ) : (
-                <p className="text-sm text-gray-400">Click to upload your profile image</p>
-                )}
-                <input
-                id="profileImage"
-                type="file"
-                accept="image/*"
-                className="hidden"
-                onChange={handleFileChange}
-                />
-            </label>
-            {fieldErrors.profile_image && (
-                <p className="text-red-500 text-sm mt-1">{fieldErrors.profile_image}</p>
-            )}
-            </div>
 
         <button
           type="submit"
