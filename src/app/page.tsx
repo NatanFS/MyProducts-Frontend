@@ -1,5 +1,3 @@
-// src/app/page.tsx
-
 'use client';
 
 import { useEffect, useContext } from 'react';
@@ -12,7 +10,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (authContext?.user) {
-      router.push('/protected/tasks');
+      router.push('/protected/products');
     } else {
       router.push('/login');
     }

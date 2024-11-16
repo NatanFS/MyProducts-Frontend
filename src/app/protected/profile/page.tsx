@@ -1,5 +1,3 @@
-// src/app/protected/profile/page.tsx
-
 'use client';
 
 import { useContext } from 'react';
@@ -17,7 +15,6 @@ export default function ProfilePage() {
       <h1 className="text-2xl mb-4">Profile</h1>
       <p><strong>Username:</strong> {user.username}</p>
       <p><strong>Email:</strong> {user.email}</p>
-      {/* Add more profile details as needed */}
     </div>
   );
 }

@@ -1,5 +1,3 @@
-// src/app/protected/layout.tsx
-
 'use client';
 
 import { AuthProvider, AuthContext } from '../../context/AuthContext';
@@ -16,17 +14,21 @@ export default function ProtectedLayout({
   const router = useRouter();
 
   if (!user) {
-    // Redirect to login if not authenticated
-    router.push('/login');
+    setTimeout(() => {
+        router.push('/login');
+    }, 0);
     return null;
   }
 
   return (
     <div className="flex">
-      <Sidebar />
-      <main className="flex-1 ml-64">
+    <Sidebar />
+    <main className="flex-1 md:pl-64 flex items-center justify-center">
+        <div className="w-full max-w-[1960px] mx-auto">
         {children}
-      </main>
+        </div>
+    </main>
     </div>
+
   );
 }

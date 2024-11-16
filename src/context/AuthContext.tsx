@@ -1,5 +1,3 @@
-// src/context/AuthContext.tsx
-
 'use client';
 
 import React, { createContext, useState, useEffect } from 'react';
@@ -7,7 +5,9 @@ import apiFetch, { loginUser } from '../utils/api';
 
 interface User {
   id: number;
+  name: string;
   username: string;
+  profile_image: string;
   email: string;
 }
 
@@ -23,16 +23,24 @@ export const AuthContext = createContext<AuthContextProps | undefined>(
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      apiFetch('/users/me')
-        .then((data) => setUser(data))
-        .catch(() => {
+    const initializeUser = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        try {
+          const userData = await apiFetch('/users/me');
+          setUser(userData);
+        } catch (error) {
+          console.error('Failed to fetch user data', error);
           logout();
-        });
-    }
+        }
+      }
+      setIsAuthLoading(false);
+    };
+
+    initializeUser();
   }, []);
 
   const login = async (username: string, password: string) => {
@@ -44,7 +52,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const userData = await apiFetch('/users/me');
       setUser(userData);
     } catch (error) {
-      console.error('Failed to login', error);
       throw error;
     }
   };
@@ -56,7 +63,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
-      {children}
+      {!isAuthLoading && children}
     </AuthContext.Provider>
   );
 };
