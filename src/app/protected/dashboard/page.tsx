@@ -78,7 +78,6 @@ export default function Dashboard() {
       }
     }
   };
-  
 
   if (!metrics) return <div>Loading...</div>;
 
