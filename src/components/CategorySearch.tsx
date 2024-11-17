@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 
 interface CategorySearchProps {
   categories: { id: number; name: string }[];
-  selectedCategoryId: number | ""; // Updated to match usage
+  selectedCategoryId: number | "";
   setCategoryId: (id: number | "") => void;
 }
 

@@ -111,9 +111,10 @@ export default function ProductsPage() {
   return (
     <div className="p-6 min-h-screen text-white">
       <h1 className="text-4xl font-bold mb-6 text-center">My Products</h1>
+      <hr className="border-gray-600 mt-4 mb-6" />
 
-      <div className="relative flex flex-wrap items-center gap-4">
-        <div className="flex flex-1 items-center gap-4 justify-center">
+      <div className="relative flex flex-wrap items-left gap-4 pb-4">
+        <div className="flex flex-1 items-center gap-4 justify-start">
           <input
             type="text"
             placeholder="Search product"
@@ -163,7 +164,6 @@ export default function ProductsPage() {
         />
       )}
 
-      <hr className="border-gray-600 mt-4 mb-6" />
 
       {loading ? (
         <div className="flex flex-col items-center text-center mt-8">
