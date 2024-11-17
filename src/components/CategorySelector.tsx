@@ -1,13 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import apiFetch from '../utils/api';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { CategorySelectorProps } from '@/types';
 
-interface CategorySelectorProps {
-  categories: { id: number; name: string }[];
-  selectedCategoryId: number | '';
-  setCategoryId: (id: number | '') => void;
-  setCategories: React.Dispatch<React.SetStateAction<{ id: number; name: string }[]>>;
-}
+
 
 export default function CategorySelector({
   categories,
@@ -31,7 +27,7 @@ export default function CategorySelector({
           'Content-Type': 'application/json',
         },
       });
-      setCategories((prevCategories) => [...prevCategories, addedCategory]);
+      setCategories?.([...categories, addedCategory]);
       setCategoryId(addedCategory.id);
       setSearchTerm(addedCategory.name);
       setIsDropdownOpen(false);
@@ -46,7 +42,8 @@ export default function CategorySelector({
       await apiFetch(`/products/categories/${id}/`, {
         method: 'DELETE',
       });
-      setCategories((prevCategories) => prevCategories.filter((category) => category.id !== id));
+      const updatedCategories = categories.filter((category) => category.id !== id);
+      setCategories?.(updatedCategories);
       setCategoryId('');
       setSearchTerm('');
     } catch (error: any) {

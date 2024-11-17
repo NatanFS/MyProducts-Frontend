@@ -17,18 +17,10 @@ import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import ToggleChart from "@/components/ToggleChart";
 import SalesOverTimeChart from "@/components/SalesOverTimeChart";
 import DashboardCard from "@/components/DashboardCard";
+import { DashboardMetrics } from "@/types";
+import StickyNav from "@/components/StickyNav";
 
 ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
-
-interface DashboardMetrics {
-  total_products: number;
-  low_stock_products: number;
-  total_stock_value: number;
-  total_sales: number;
-  total_revenue: number;
-  start_date: string | null;
-  end_date: string | null;
-}
 
 export default function Dashboard() {
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
@@ -94,21 +86,7 @@ export default function Dashboard() {
       <div className="p-4 sm:p-6 lg:p-8 min-h-screen text-white">
         <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">Dashboard</h1>
 
-        <div className="flex flex-row border-b border-gray-600 mb-6">
-            {["today", "this_week", "this_month", "this_year", "all_time"].map((value) => (
-            <button
-                key={value}
-                className={`px-4 py-2 text-sm sm:text-base font-medium border-b-2 ${
-                filter === value
-                    ? "text-blue-500 border-blue-500"
-                    : "text-gray-400 border-transparent hover:text-white hover:border-gray-400"
-                }`}
-                onClick={() => setFilter(value)}
-            >
-                {value.replace("_", " ").replace(/\b\w/g, (char) => char.toUpperCase())}
-            </button>
-            ))}
-        </div>
+        <StickyNav filter={filter} setFilter={setFilter} />
 
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-6 pb-4">
             <DashboardCard
@@ -187,42 +165,39 @@ export default function Dashboard() {
         </div>
         
 
-<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-  <ToggleChart
-    endpoint="/reports/most_sold_categories"
-    title="Most Sold Categories"
-    labelKey="category"
-    valueKey="total_sold"
-    initialChartType="bar"
-    start_date={metrics.start_date!}
-    end_date={metrics.end_date!}
-  />
-  <ToggleChart
-    endpoint="/reports/most_sold_products"
-    title="Most Sold Products"
-    labelKey="name"
-    valueKey="total_sold"
-    initialChartType="bar"
-    start_date={metrics.start_date!}
-    end_date={metrics.end_date!}
-  />
-  <ToggleChart
-    endpoint="/reports/products_by_category"
-    title="Products by Category"
-    labelKey="category"
-    valueKey="product_count"
-    initialChartType="pie"
-    start_date={metrics.start_date!}
-    end_date={metrics.end_date!}
-  />
-  <div>
-    <SalesOverTimeChart />
-  </div>
-</div>
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <ToggleChart
+        endpoint="/reports/most_sold_categories"
+        title="Most Sold Categories"
+        labelKey="category"
+        valueKey="total_sold"
+        initialChartType="bar"
+        start_date={metrics.start_date!}
+        end_date={metrics.end_date!}
+      />
+      <ToggleChart
+        endpoint="/reports/most_sold_products"
+        title="Most Sold Products"
+        labelKey="name"
+        valueKey="total_sold"
+        initialChartType="bar"
+        start_date={metrics.start_date!}
+        end_date={metrics.end_date!}
+      />
+      <ToggleChart
+        endpoint="/reports/products_by_category"
+        title="Products by Category"
+        labelKey="category"
+        valueKey="product_count"
+        initialChartType="pie"
+        start_date={metrics.start_date!}
+        end_date={metrics.end_date!}
+      />
+      <div>
+        <SalesOverTimeChart />
+      </div>
+    </div>
 
-
-
-      
     </div>
   );
 }

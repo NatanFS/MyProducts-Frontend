@@ -2,24 +2,9 @@ import { useState } from 'react';
 import apiFetch from '../utils/api';
 import CategorySelector from './CategorySelector';
 import { NumericFormat } from 'react-number-format';
+import { ProductDetailsModalProps } from '@/types';
 
-interface ProductDetailsModalProps {
-  product: {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    sales: number;
-    category_id: number;
-    category: { id: number; name: string };
-    image?: string;
-  };
-  categories: { id: number; name: string }[];
-  setCategories: React.Dispatch<React.SetStateAction<{ id: number; name: string }[]>>;
-  onUpdateComplete: () => void;
-  onClose: () => void;
-}
+
 
 export default function ProductDetailsModal({
   product,

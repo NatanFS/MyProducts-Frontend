@@ -4,13 +4,7 @@ import { useState } from 'react';
 import CategorySelector from './CategorySelector';
 import apiFetch from '../utils/api';
 import { NumericFormat } from 'react-number-format';
-
-interface AddProductModalProps {
-  onCancel: () => void;
-  categories: { id: number; name: string }[];
-  setCategories: React.Dispatch<React.SetStateAction<{ id: number; name: string }[]>>;
-  fetchProducts: () => void;
-}
+import { AddProductModalProps } from '@/types';
 
 export default function AddProductModal({
     onCancel,

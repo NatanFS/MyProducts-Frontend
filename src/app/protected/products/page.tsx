@@ -9,32 +9,9 @@ import AddIcon from '@mui/icons-material/Add';
 import ProductDetailsModal from '../../../components/ProductDetailsModal';
 import AddProductModal from '../../../components/AddProductModal';
 import CategorySearch from '@/components/CategorySearch';
+import { Product, Category, PaginatedResponse } from '@/types';
+import ProductCard from '@/components/ProductCard';
 
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  code: string;
-  price: number;
-  stock: number;
-  sales: number;
-  image: string;
-  category_id: number;
-  category: Category;
-}
-
-interface Category {
-  id: number;
-  name: string;
-}
-
-interface PaginatedResponse {
-  page: number;
-  page_size: number;
-  total_pages: number;
-  total_items: number;
-  products: Product[];
-}
 
 export default function ProductsPage() {
   const authContext = useContext(AuthContext);
@@ -113,38 +90,46 @@ export default function ProductsPage() {
       <h1 className="text-4xl font-bold mb-6 text-center">My Products</h1>
       <hr className="border-gray-600 mt-4 mb-6" />
 
-      <div className="relative flex flex-wrap items-left gap-4 pb-4">
-        <div className="flex flex-1 items-center gap-4 justify-start">
-          <input
-            type="text"
-            placeholder="Search product"
-            className="shared-input bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 w-full md:w-1/3 text-gray-300 placeholder-gray-400 shadow-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-11"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <CategorySearch
-            categories={categories}
-            selectedCategoryId={category}
-            setCategoryId={setCategory}
-          />
-          <button
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg mr-16 md:w-auto hover:bg-blue-700 shadow-md transition h-11 flex items-center justify-center gap-2"
-            onClick={fetchProducts}
-          >
-            <SearchIcon className="text-white" />
-            <span className="hidden md:inline-block ml-2">Search</span>
-          </button>
+      <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full mb-4 md:justify-between">
+      {/* Search Input */}
+      <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4">
+        <input
+          type="text"
+          placeholder="Search product"
+          className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 w-full sm:w-1/3 md:w-1/3 text-gray-300 placeholder-gray-400 shadow-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-11"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-        </div>
+        {/* Category Dropdown */}
+        <CategorySearch
+          categories={categories}
+          selectedCategoryId={category}
+          setCategoryId={setCategory}
+        />
 
+        {/* Search Button */}
         <button
-          className="absolute right-0 bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition h-11 flex items-center justify-center"
-          onClick={() => setIsModalOpen(true)}
+          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 shadow-md transition h-11 flex items-center justify-center gap-2 w-full sm:w-auto"
+          onClick={fetchProducts}
         >
-          <AddIcon />
+          <SearchIcon className="text-white" />
+          <span className="hidden md:inline-block">Search</span>
         </button>
       </div>
 
+      {/* Add Button */}
+      <button
+        className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition h-11 flex items-center justify-center sm:justify-end sm:self-start w-full sm:w-auto ml-auto md:ml-0"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <AddIcon />
+      </button>
+    </div>
+
+
+
+      {/* Modals */}
       {isModalOpen && (
         <AddProductModal
           categories={categories}
@@ -153,7 +138,6 @@ export default function ProductsPage() {
           onCancel={() => setIsModalOpen(false)}
         />
       )}
-
       {selectedProduct && (
         <ProductDetailsModal
           product={selectedProduct}
@@ -164,7 +148,7 @@ export default function ProductsPage() {
         />
       )}
 
-
+      {/* Products Listing */}
       {loading ? (
         <div className="flex flex-col items-center text-center mt-8">
           <svg
@@ -194,64 +178,72 @@ export default function ProductsPage() {
           No products found. Try adjusting your filters.
         </div>
       ) : (
-        <div className="overflow-x-auto rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
-          <table className="min-w-full border-collapse text-left text-gray-300">
-          <thead className="bg-gray-700">
-            <tr>
-              {['image', 'name', 'description', 'price', 'stock', 'sales', 'code', 'category'].map((col) => (
-                <th
-                  key={col}
-                  className={`border border-gray-600 px-4 py-2 ${
-                    col !== 'image' ? 'cursor-pointer' : ''
-                  } ${orderBy === col ? 'bg-blue-600 text-white' : ''}`}
-                  onClick={col !== 'image' ? () => handleHeaderClick(col) : undefined} 
-                >
-                  {col.charAt(0).toUpperCase() + col.slice(1)}{' '}
-                  {orderBy === col && col !== 'image' && (order === 'asc' ? '▲' : '▼')}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((product, index) => (
-              <tr
+        <>
+          {/* Card View for Mobile */}
+          <div className="grid grid-cols-1 gap-4 lg:hidden">
+            {products.map((product) => (
+              <ProductCard
                 key={product.id}
-                className={`hover:bg-gray-700 transition cursor-pointer ${
-                  index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900'
-                }`}
-                onClick={() => setSelectedProduct(product)}
-              >
-                <td className="border border-gray-600 px-4 py-2 text-center">
-                  {product.image ? (
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-16 h-16 object-cover rounded-md mx-auto"
-                    />
-                  ) : (
-                    <img
-                      src="/default-placeholder.png"
-                      alt="Default"
-                      className="w-16 h-16 object-cover rounded-md mx-auto"
-                    />
-                  )}
-                </td>
-                <td className="border border-gray-600 px-4 py-2">{product.name}</td>
-                <td className="border border-gray-600 px-4 py-2">{product.description}</td>
-                <td className="border border-gray-600 px-4 py-2">
-                  ${product.price.toFixed(2)}
-                </td>
-                <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
-                <td className="border border-gray-600 px-4 py-2">{product.sales}</td>
-                <td className="border border-gray-600 px-4 py-2">{product.code}</td>
-                <td className="border border-gray-600 px-4 py-2">{product.category? product.category.name : 'No category'}</td>
-              </tr>
+                product={product}
+                onClick={setSelectedProduct} // Pass the `setSelectedProduct` function to handle clicks
+              />
             ))}
-          </tbody>
-        </table>
-        </div>
+          </div>
+
+          {/* Table View for Desktop */}
+          <div className="hidden lg:block overflow-x-auto rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
+            <table className="min-w-full border-collapse text-left text-gray-300">
+              <thead className="bg-gray-700">
+                <tr>
+                  {['image', 'name', 'description', 'price', 'stock', 'sales', 'code', 'category'].map((col) => (
+                    <th
+                      key={col}
+                      className={`border border-gray-600 px-4 py-2 ${
+                        col !== 'image' ? 'cursor-pointer' : ''
+                      } ${orderBy === col ? 'bg-blue-600 text-white' : ''}`}
+                      onClick={col !== 'image' ? () => handleHeaderClick(col) : undefined}
+                    >
+                      {col.charAt(0).toUpperCase() + col.slice(1)}{' '}
+                      {orderBy === col && col !== 'image' && (order === 'asc' ? '▲' : '▼')}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {products.map((product, index) => (
+                  <tr
+                    key={product.id}
+                    className={`hover:bg-gray-700 transition cursor-pointer ${
+                      index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900'
+                    }`}
+                    onClick={() => setSelectedProduct(product)}
+                  >
+                    <td className="border border-gray-600 px-4 py-2 text-center">
+                      <img
+                        src={product.image || '/default-placeholder.png'}
+                        alt={product.name}
+                        className="w-16 h-16 object-cover rounded-md mx-auto"
+                      />
+                    </td>
+                    <td className="border border-gray-600 px-4 py-2">{product.name}</td>
+                    <td className="border border-gray-600 px-4 py-2">{product.description}</td>
+                    <td className="border border-gray-600 px-4 py-2">${product.price.toFixed(2)}</td>
+                    <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
+                    <td className="border border-gray-600 px-4 py-2">{product.sales}</td>
+                    <td className="border border-gray-600 px-4 py-2">{product.code}</td>
+                    <td className="border border-gray-600 px-4 py-2">
+                      {product.category ? product.category.name : 'No category'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
       )}
-      {(products.length != 0) ? (
+
+      {/* Pagination */}
+      {products.length > 0 && (
         <div className="flex justify-between items-center mt-6">
           <button
             className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
@@ -270,8 +262,8 @@ export default function ProductsPage() {
           >
             Next
           </button>
-      </div>) : (<></>)
-    }
+        </div>
+      )}
     </div>
   );
 }

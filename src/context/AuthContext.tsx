@@ -2,20 +2,7 @@
 
 import React, { createContext, useState, useEffect } from 'react';
 import apiFetch, { loginUser } from '../utils/api';
-
-interface User {
-  id: number;
-  name: string;
-  username: string;
-  profile_image: string;
-  email: string;
-}
-
-interface AuthContextProps {
-  user: User | null;
-  login: (username: string, password: string) => Promise<void>;
-  logout: () => void;
-}
+import { AuthContextProps, User } from '@/types';
 
 export const AuthContext = createContext<AuthContextProps | undefined>(
   undefined

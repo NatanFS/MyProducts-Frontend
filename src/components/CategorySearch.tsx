@@ -1,16 +1,11 @@
+import { CategorySelectorProps } from '@/types';
 import { useState, useRef, useEffect } from 'react';
-
-interface CategorySearchProps {
-  categories: { id: number; name: string }[];
-  selectedCategoryId: number | "";
-  setCategoryId: (id: number | "") => void;
-}
 
 export default function CategorySearch({
   categories,
   selectedCategoryId,
   setCategoryId,
-}: CategorySearchProps) {
+}: CategorySelectorProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -48,7 +43,7 @@ export default function CategorySearch({
             }
           }}
         placeholder="Search categories"
-        className="block w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+        className="block w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 h-11"
       />
       {isDropdownOpen && (
         <div className="absolute top-full left-0 w-full bg-gray-800 border border-gray-600 rounded-lg max-h-40 overflow-y-auto mt-1 z-10">

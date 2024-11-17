@@ -11,23 +11,12 @@ import {
   ArcElement,
 } from "chart.js";
 import apiFetch from "@/utils/api";
+import { ChartDataItem, ToggleChartProps } from "@/types";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
-interface ChartDataItem {
-  label: string | null;
-  value: number;
-}
 
-interface ToggleChartProps {
-  endpoint: string;
-  title: string;
-  labelKey: string;
-  valueKey: string;
-  initialChartType?: "pie" | "bar";
-  start_date: string;
-  end_date: string;
-}
+
 
 export default function ToggleChart({
   endpoint,
