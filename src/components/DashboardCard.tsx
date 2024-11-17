@@ -18,7 +18,6 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ title, value, icon, borde
         </div>
         <h2 className="text-lg sm:text-xl font-bold text-white mb-2">{title}</h2>
         <p className="text-xl sm:text-2xl font-extrabold text-white">{value !== undefined ? value : "N/A"}</p>
-        {/* {message && <p className="text-sm sm:text-base text-gray-300 mt-4">{message}</p>} */}
       </div>
     );
   };

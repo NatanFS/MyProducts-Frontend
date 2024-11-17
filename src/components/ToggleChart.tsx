@@ -20,12 +20,12 @@ interface ChartDataItem {
 }
 
 interface ToggleChartProps {
-  endpoint: string; 
-  title: string; 
-  labelKey: string; 
-  valueKey: string; 
+  endpoint: string;
+  title: string;
+  labelKey: string;
+  valueKey: string;
   initialChartType?: "pie" | "bar";
-  start_date: string; 
+  start_date: string;
   end_date: string;
 }
 
@@ -40,14 +40,24 @@ export default function ToggleChart({
 }: ToggleChartProps) {
   const [dataItems, setDataItems] = useState<ChartDataItem[]>([]);
   const [chartType, setChartType] = useState<"pie" | "bar">(initialChartType);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   useEffect(() => {
     fetchData();
   }, [start_date, end_date]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const convertToUTC = (dateString: string): string => {
     const date = new Date(dateString);
-    return date.toISOString(); 
+    return date.toISOString();
   };
 
   const fetchData = async () => {
@@ -85,7 +95,7 @@ export default function ToggleChart({
 
   const chartOptions = {
     responsive: true,
-    
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "top" as const,
@@ -98,7 +108,7 @@ export default function ToggleChart({
   };
 
   return (
-    <div className="bg-gray-900 p-4 rounded-lg shadow-md justify-center align-middle ">
+    <div className="bg-gray-900 p-4 rounded-lg shadow-md justify-center align-middle w-full">
       <h2 className="text-2xl font-semibold mb-4 text-white">{title}</h2>
 
       <div className="mb-4 flex gap-2">
@@ -118,17 +128,15 @@ export default function ToggleChart({
         >
           Pie Chart
         </button>
-        
       </div>
 
-      <div className="flex flex-auto max-h-[500px] items-center justify-center">
+      <div className="flex flex-auto h-[300px] lg:h-[500px] items-center justify-center">
         {chartType === "pie" ? (
           <Pie data={chartData} options={chartOptions} />
         ) : (
           <Bar data={chartData} options={chartOptions} />
         )}
       </div>
-
     </div>
   );
 }

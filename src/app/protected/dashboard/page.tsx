@@ -94,7 +94,6 @@ export default function Dashboard() {
       <div className="p-4 sm:p-6 lg:p-8 min-h-screen text-white">
         <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">Dashboard</h1>
 
-        {/* Filters */}
         <div className="flex flex-row border-b border-gray-600 mb-6">
             {["today", "this_week", "this_month", "this_year", "all_time"].map((value) => (
             <button
@@ -188,7 +187,6 @@ export default function Dashboard() {
         </div>
         
 
-{/* Chart Section */}
 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
   <ToggleChart
     endpoint="/reports/most_sold_categories"
