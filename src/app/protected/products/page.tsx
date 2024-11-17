@@ -91,7 +91,6 @@ export default function ProductsPage() {
       <hr className="border-gray-600 mt-4 mb-6" />
 
       <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full mb-4 md:justify-between">
-      {/* Search Input */}
       <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4">
         <input
           type="text"
@@ -101,14 +100,12 @@ export default function ProductsPage() {
           onChange={(e) => setSearch(e.target.value)}
         />
 
-        {/* Category Dropdown */}
         <CategorySearch
           categories={categories}
           selectedCategoryId={category}
           setCategoryId={setCategory}
         />
 
-        {/* Search Button */}
         <button
           className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 shadow-md transition h-11 flex items-center justify-center gap-2 w-full sm:w-auto"
           onClick={fetchProducts}
@@ -118,7 +115,6 @@ export default function ProductsPage() {
         </button>
       </div>
 
-      {/* Add Button */}
       <button
         className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition h-11 flex items-center justify-center sm:justify-end sm:self-start w-full sm:w-auto ml-auto md:ml-0"
         onClick={() => setIsModalOpen(true)}
@@ -127,9 +123,6 @@ export default function ProductsPage() {
       </button>
     </div>
 
-
-
-      {/* Modals */}
       {isModalOpen && (
         <AddProductModal
           categories={categories}
@@ -148,7 +141,6 @@ export default function ProductsPage() {
         />
       )}
 
-      {/* Products Listing */}
       {loading ? (
         <div className="flex flex-col items-center text-center mt-8">
           <svg
@@ -179,18 +171,16 @@ export default function ProductsPage() {
         </div>
       ) : (
         <>
-          {/* Card View for Mobile */}
           <div className="grid grid-cols-1 gap-4 lg:hidden">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
-                onClick={setSelectedProduct} // Pass the `setSelectedProduct` function to handle clicks
+                onClick={setSelectedProduct}
               />
             ))}
           </div>
 
-          {/* Table View for Desktop */}
           <div className="hidden lg:block overflow-x-auto rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
             <table className="min-w-full border-collapse text-left text-gray-300">
               <thead className="bg-gray-700">
@@ -242,7 +232,6 @@ export default function ProductsPage() {
         </>
       )}
 
-      {/* Pagination */}
       {products.length > 0 && (
         <div className="flex justify-between items-center mt-6">
           <button
