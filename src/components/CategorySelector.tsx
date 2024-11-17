@@ -15,11 +15,14 @@ export default function CategorySelector({
   setCategoryId,
   setCategories,
 }: CategorySelectorProps) {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState(() => {
+    const selectedCategory = categories.find((category) => category.id === selectedCategoryId);
+    return selectedCategory ? selectedCategory.name : '';
+  });
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const handleAddCategory = async (): Promise<{ id: number; name: string }> => {
+  const handleAddCategory = async (): Promise<void> => {
     try {
       const addedCategory = await apiFetch('/products/categories/', {
         method: 'POST',
@@ -28,13 +31,10 @@ export default function CategorySelector({
           'Content-Type': 'application/json',
         },
       });
-
       setCategories((prevCategories) => [...prevCategories, addedCategory]);
       setCategoryId(addedCategory.id);
       setSearchTerm(addedCategory.name);
       setIsDropdownOpen(false);
-
-      return addedCategory;
     } catch (error: any) {
       console.error('Error adding category:', error);
       throw error;
@@ -47,9 +47,8 @@ export default function CategorySelector({
         method: 'DELETE',
       });
       setCategories((prevCategories) => prevCategories.filter((category) => category.id !== id));
-      if (selectedCategoryId === id) {
-        setCategoryId('');
-      }
+      setCategoryId('');
+      setSearchTerm('');
     } catch (error: any) {
       console.error('Error deleting category:', error);
     }

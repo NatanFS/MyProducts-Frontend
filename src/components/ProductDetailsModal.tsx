@@ -16,6 +16,7 @@ interface ProductDetailsModalProps {
     image?: string;
   };
   categories: { id: number; name: string }[];
+  setCategories: React.Dispatch<React.SetStateAction<{ id: number; name: string }[]>>;
   onUpdateComplete: () => void;
   onClose: () => void;
 }
@@ -23,19 +24,20 @@ interface ProductDetailsModalProps {
 export default function ProductDetailsModal({
   product,
   categories,
+  setCategories,
   onUpdateComplete,
   onClose,
 }: ProductDetailsModalProps) {
-  const [updatedProduct, setUpdatedProduct] = useState({ ...product });
-  const [image, setImage] = useState<File | null>(null);
-  const [categoriesState, setCategoriesState] = useState(categories);
+const [selectedCategoryId, setSelectedCategoryId] = useState<number | ''>(product.category? product.category.id : '');
+const [updatedProduct, setUpdatedProduct] = useState({ ...product });
+const [image, setImage] = useState<File | null>(null);
 
-  const handleChange = (field: string, value: any) => {
+const handleChange = (field: string, value: any) => {
     setUpdatedProduct((prev) => ({
-      ...prev,
-      [field]: value,
+        ...prev,
+        [field]: value,
     }));
-  };
+};
 
   const handleUpdate = async () => {
     const formData = new FormData();
@@ -44,7 +46,7 @@ export default function ProductDetailsModal({
     formData.append('price', updatedProduct.price.toString());
     formData.append('stock', updatedProduct.stock.toString());
     formData.append('sales', updatedProduct.sales.toString());
-    formData.append('category_id', updatedProduct.category.id.toString());
+    formData.append('category_id', selectedCategoryId.toString());
 
     if (image) {
       formData.append('image', image);
@@ -127,16 +129,13 @@ export default function ProductDetailsModal({
             className="block w-full mb-3 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
           />
           <label className="block text-sm font-medium text-gray-300 mb-1">Category</label>
-          <CategorySelector
-            categories={categoriesState}
+
+        <CategorySelector
+            categories={categories}
             selectedCategoryId={updatedProduct.category_id} 
-            setCategoryId={(id) => {
-                const selectedCategory = categoriesState.find((cat) => cat.id === id);
-                handleChange('category_id', id);
-                handleChange('category', selectedCategory || updatedProduct.category);
-            }}
-            setCategories={setCategoriesState}
-            />
+            setCategoryId={setSelectedCategoryId}
+            setCategories={setCategories}
+        />
           <label className="block mt-3 text-sm font-medium text-gray-300 mb-1">Product Image</label>
           <div className="relative">
             <input

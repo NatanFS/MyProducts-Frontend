@@ -8,6 +8,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
 import ProductDetailsModal from '../../../components/ProductDetailsModal';
 import AddProductModal from '../../../components/AddProductModal';
+import CategorySearch from '@/components/CategorySearch';
 
 interface Product {
   id: number;
@@ -42,7 +43,7 @@ export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [search, setSearch] = useState('');
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState<number | "">("");
   const [orderBy, setOrderBy] = useState('name');
   const [order, setOrder] = useState('asc');
   const [loading, setLoading] = useState(false);
@@ -57,13 +58,13 @@ export default function ProductsPage() {
     try {
       const queryParams = new URLSearchParams({
         ...(search && { search }),
-        ...(category && { category: category }),
+        ...(typeof category === "number" && { category: category.toString() }),
         ...(orderBy && { order_by: orderBy }),
         ...(order && { order }),
         page: page.toString(),
         page_size: pageSize.toString(),
-      }).toString();
-
+      });
+  
       const data: PaginatedResponse = await apiFetch(`/products/?${queryParams}`);
       setProducts(data.products);
       setTotalPages(data.total_pages);
@@ -87,7 +88,7 @@ export default function ProductsPage() {
     fetchCategories();
     fetchProducts();
   }, [authContext, router, search, category, orderBy, order, page, pageSize]);
-
+  
   const handleHeaderClick = (column: string) => {
     if (orderBy === column) {
       setOrder(order === 'asc' ? 'desc' : 'asc');
@@ -120,18 +121,11 @@ export default function ProductsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <select
-            className="shared-input bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 w-full md:w-1/5 text-gray-400 shadow-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-11"
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="">All Categories</option>
-            {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
-            ))}
-          </select>
+          <CategorySearch
+            categories={categories}
+            selectedCategoryId={category}
+            setCategoryId={setCategory}
+          />
           <button
             className="bg-blue-600 text-white px-6 py-2 rounded-lg mr-16 md:w-auto hover:bg-blue-700 shadow-md transition h-11 flex items-center justify-center gap-2"
             onClick={fetchProducts}
@@ -163,11 +157,11 @@ export default function ProductsPage() {
         <ProductDetailsModal
           product={selectedProduct}
           categories={categories}
+          setCategories={setCategories}
           onUpdateComplete={fetchProducts}
           onClose={() => setSelectedProduct(null)}
         />
       )}
-
 
       <hr className="border-gray-600 mt-4 mb-6" />
 
@@ -250,7 +244,7 @@ export default function ProductsPage() {
                 <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
                 <td className="border border-gray-600 px-4 py-2">{product.sales}</td>
                 <td className="border border-gray-600 px-4 py-2">{product.code}</td>
-                <td className="border border-gray-600 px-4 py-2">{product.category.name}</td>
+                <td className="border border-gray-600 px-4 py-2">{product.category? product.category.name : 'No category'}</td>
               </tr>
             ))}
           </tbody>

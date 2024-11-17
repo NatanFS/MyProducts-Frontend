@@ -120,6 +120,10 @@ export default function AddProductModal({
                 fixedDecimalScale
                 prefix="$"
                 className="block w-full mb-3 bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-blue-500"
+                onValueChange={(values) => {
+                    const { floatValue } = values;
+                    setPrice(floatValue || ""); 
+                }}
                 />
               {fieldErrors.price && <p className="text-red-500 text-sm mb-2">{fieldErrors.price}</p>}
   
