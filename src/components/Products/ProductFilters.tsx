@@ -26,30 +26,33 @@ export default function Filters({
   };
 
   return (
-    <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:justify-between">
-      <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4">
-        <input
-          type="text"
-          placeholder="Search product"
-          className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 w-full sm:w-1/3 md:w-1/3 text-gray-300 placeholder-gray-400 shadow-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-11"
-          value={searchInput}
-          onChange={(e) => handleSearchChange(e.target.value)}
-        />
-
-        <CategorySearch
-          categories={categories}
-          selectedCategoryId={filters.category}
-          setCategoryId={(id) => onFilterChange("category", id)}
-        />
-
-        <button
-          onClick={onSearch}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 shadow-md transition h-11 flex items-center justify-center gap-2 w-full sm:w-auto"
-        >
-          <SearchIcon className="text-white" />
-          <span className="hidden md:inline-block">Search</span>
-        </button>
+    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full">
+  <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4">
+    {/* Search Input */}
+    <div className="relative w-full sm:w-2/3 md:w-1/3">
+      <input
+        type="text"
+        placeholder="Search product"
+        className="w-full bg-gray-700 rounded-full px-5 py-3 text-gray-300 placeholder-gray-500 shadow-inner focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+        value={searchInput}
+        onChange={(e) => handleSearchChange(e.target.value)}
+      />
+      <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
+        <SearchIcon className="text-gray-400 w-6 h-6" />
       </div>
     </div>
+
+    {/* Category Filter */}
+    <div className="w-full sm:w-auto">
+      <CategorySearch
+        categories={categories}
+        selectedCategoryId={filters.category}
+        setCategoryId={(id) => onFilterChange("category", id)}
+      />
+    </div>
+  </div>
+</div>
+
+
   );
 }

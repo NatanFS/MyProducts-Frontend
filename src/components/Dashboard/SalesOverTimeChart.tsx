@@ -1,26 +1,28 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
-  ArcElement,
-  Tooltip,
-  Legend,
   CategoryScale,
   LinearScale,
   PointElement,
   LineElement,
+  Title,
+  Tooltip,
+  Legend,
+  Chart as ChartInstance,
 } from "chart.js";
 import apiFetch from "../../utils/api";
 import LoadingSpinner from "../Common/LoadingSpinner";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
 
 ChartJS.register(
-  ArcElement,
-  Tooltip,
-  Legend,
   CategoryScale,
   LinearScale,
   PointElement,
-  LineElement
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
 );
 
 interface SalesOverTimeChartProps {
@@ -33,6 +35,8 @@ export default function SalesOverTimeChart({
   end_date,
 }: SalesOverTimeChartProps) {
   const [chartData, setChartData] = useState<any>(null);
+  const [isHovering, setIsHovering] = useState(false);
+  const chartRef = useRef<ChartInstance<"line"> | null>(null);
 
   useEffect(() => {
     fetchSalesData();
@@ -52,12 +56,13 @@ export default function SalesOverTimeChart({
           {
             label: "Sales Over Time",
             data: sales,
-            borderColor: "rgba(75, 192, 192, 1)",
-            backgroundColor: "rgba(75, 192, 192, 0.2)",
-            pointBackgroundColor: "rgba(75, 192, 192, 1)",
-            pointBorderColor: "rgba(75, 192, 192, 1)",
+            borderColor: "rgb(54, 162, 235)", 
+            backgroundColor: "rgba(54, 162, 235, 0.2)",
+            pointBackgroundColor: "rgb(54, 162, 235)",
+            pointBorderColor: "rgb(54, 70, 95)",
             pointRadius: 5,
-            fill: true,
+            tension: 0.4,
+            borderWidth: 2,
           },
         ],
       });
@@ -66,17 +71,44 @@ export default function SalesOverTimeChart({
     }
   };
 
+  const gradientStyle: React.CSSProperties = isHovering
+    ? {
+        background: `linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent)`,
+        opacity: 1,
+        transition: "opacity 0.2s ease-out",
+      }
+    : {
+        background: `linear-gradient(to bottom, rgba(255, 255, 255, 0.05), transparent)`,
+        opacity: 0,
+        transition: "opacity 0.2s ease-in",
+      };
+
   if (!chartData) return <LoadingSpinner />;
 
   return (
-    <div className="flex justify-center items-center bg-gray-900 rounded-lg w-full h-max">
-      <div className="py-4 px-4 w-full max-w-4xl">
-        <h2 className="text-xl font-bold text-center mb-4 text-white">
-          Sales Over Time
-        </h2>
+    <div
+      className="relative bg-gray-900 rounded-lg w-full h-max p-6 shadow-lg"
+      onMouseEnter={() => setIsHovering(true)} 
+      onMouseLeave={() => setIsHovering(false)} 
+    >
+      <div
+        className="absolute inset-0 pointer-events-none rounded-lg"
+        style={gradientStyle}
+      ></div>
+
+      <div className="relative z-10">
+        <div className="flex items-center mb-6">
+          <InformationCircleIcon
+            className="w-6 h-6 text-indigo-500 mr-2"
+            aria-hidden="true"
+          />
+          <h2 className="text-3xl font-semibold text-white">Sales Over Time</h2>
+        </div>
+
         <div className="relative w-full">
           <div className="h-80 sm:h-96 md:h-[400px] lg:h-[500px] w-full">
             <Line
+              ref={chartRef}
               data={chartData}
               options={{
                 responsive: true,

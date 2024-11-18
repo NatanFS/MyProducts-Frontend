@@ -1,6 +1,42 @@
-import React from 'react';
-import { ProductTableProps } from '@/types';
+import React from "react";
+import { ProductTableProps } from "@/types";
+import { ChevronUpIcon,
+  ChevronDownIcon,
+  PhotoIcon,
+  TagIcon,
+  CurrencyDollarIcon,
+  CubeIcon,
+  ChartBarIcon,
+  CodeBracketIcon,
+  FolderIcon } from '@heroicons/react/24/outline'
 
+const getHeaderIcon = (col: string) => {
+  switch (col) {
+    case "image":
+      return (
+        <PhotoIcon className="w-5 h-5 inline-block mr-2 text-gray-400" />
+      ); 
+    case "name":
+    case "description":
+      return <TagIcon className="w-5 h-5 inline-block mr-2 text-gray-400" />;
+    case "price":
+      return (
+        <CurrencyDollarIcon className="w-5 h-5 inline-block mr-2 text-gray-400" />
+      );
+    case "stock":
+      return <CubeIcon className="w-5 h-5 inline-block mr-2 text-gray-400" />;
+    case "sales":
+      return (
+        <ChartBarIcon className="w-5 h-5 inline-block mr-2 text-gray-400" />
+      );
+    case "code":
+      return <CodeBracketIcon className="w-5 h-5 inline-block mr-2 text-gray-400" />;
+    case "category":
+      return <FolderIcon className="w-5 h-5 inline-block mr-2 text-gray-400" />;
+    default:
+      return null;
+  }
+};
 
 const ProductTable: React.FC<ProductTableProps> = ({
   products,
@@ -10,50 +46,79 @@ const ProductTable: React.FC<ProductTableProps> = ({
   setSelectedProduct,
 }) => {
   return (
-    <div className="hidden lg:block overflow-x-auto rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
-      <table className="min-w-full border-collapse text-left text-gray-300">
-        <thead className="bg-gray-700">
+    <div className="hidden lg:block rounded-lg bg-gray-900">
+      <table className="w-full text-left text-gray-300 rounded-lg overflow-hidden">
+        <thead className="bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-gray-300 border-b border-gray-700 shadow-md">
           <tr>
-            {['image', 'name', 'description', 'price', 'stock', 'sales', 'code', 'category'].map((col) => (
+            {[
+              "image",
+              "name",
+              "description",
+              "price",
+              "stock",
+              "sales",
+              "code",
+              "category",
+            ].map((col) => (
               <th
                 key={col}
-                className={` px-4 py-2 ${col !== 'image' ? 'cursor-pointer' : ''} ${
-                  orderBy === col ? 'bg-blue-600 text-white' : ''
+                className={`px-6 py-4 text-md font-semibold tracking-wide uppercase${
+                  col !== "image"
+                    ? "cursor-pointer hover:text-blue-400 transition duration-300 ease-in-out"
+                    : ""
+                } ${
+                  orderBy === col
+                    ? "text-blue-400"
+                    : "text-gray-300"
                 }`}
-                onClick={col !== 'image' ? () => handleHeaderClick(col) : undefined}
+                onClick={col !== "image" ? () => handleHeaderClick(col) : undefined}
               >
-                {col.charAt(0).toUpperCase() + col.slice(1)}{' '}
-                {orderBy === col && col !== 'image' && (order === 'asc' ? '▲' : '▼')}
+                <div className="flex items-center">
+                  {getHeaderIcon(col)}
+                  {col.charAt(0).toUpperCase() + col.slice(1)}
+                  {orderBy === col &&
+                    col !== "image" &&
+                    (order === "asc" ? (
+                      <ChevronUpIcon className="w-5 h-5 inline-block ml-1" />
+                    ) : (
+                      <ChevronDownIcon className="w-5 h-5 inline-block ml-1" />
+                    ))}
+                </div>
               </th>
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="shadow-lg">
           {products.map((product, index) => (
             <tr
               key={product.id}
-              className={`hover:bg-gray-700 transition cursor-pointer ${
-                index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900'
+              className={`hover:shadow-lg hover:scale-[1.02] transform transition duration-200 ease-in-out cursor-pointer ${
+                index % 2 === 0 ? "bg-gray-800" : "bg-gray-850"
               }`}
               onClick={() => setSelectedProduct(product)}
             >
-              <td className=" px-4 py-2 text-center">
+              <td className="px-6 py-4">
                 <img
-                  src={product.image || '/default-placeholder.png'}
+                  src={product.image || "/default-placeholder.png"}
                   alt={product.name}
-                  className="w-16 h-16 object-cover rounded-md mx-auto"
+                  className="w-12 h-12 object-cover shadow-md mx-auto"
                 />
               </td>
-              <td className=" px-4 py-2">{product.name}</td>
-              <td className=" px-4 py-2">{product.description}</td>
-              <td className=" px-4 py-2">
-                {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price)}
+              <td className="px-6 py-4 text-md font-light">{product.name}</td>
+              <td className="px-6 py-4 text-md font-light">
+                {product.description}
               </td>
-              <td className=" px-4 py-2">{product.stock}</td>
-              <td className=" px-4 py-2">{product.sales}</td>
-              <td className=" px-4 py-2">{product.code}</td>
-              <td className=" px-4 py-2">
-                {product.category ? product.category.name : 'No category'}
+              <td className="px-6 py-4 text-md font-light">
+                {new Intl.NumberFormat("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                }).format(product.price)}
+              </td>
+              <td className="px-6 py-4 text-md font-light">{product.stock}</td>
+              <td className="px-6 py-4 text-md font-light">{product.sales}</td>
+              <td className="px-6 py-4 text-md font-light">{product.code}</td>
+              <td className="px-6 py-4 text-md font-light">
+                {product.category ? product.category.name : "No category"}
               </td>
             </tr>
           ))}

@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 
-const DashboardStickyNav = ({ filter, setFilter }: { filter: string, setFilter: (value: string) => void }) => {
+interface DashboardStickyNavProps {
+  filter: string;
+  setFilter: (value: string) => void;
+}
+
+const DashboardStickyNav: React.FC<DashboardStickyNavProps> = ({ filter, setFilter }) => {
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -14,18 +19,19 @@ const DashboardStickyNav = ({ filter, setFilter }: { filter: string, setFilter: 
 
   return (
     <div
-      className={`sticky top-0 z-10 border-b border-gray-600 mb-6 overflow-x-auto transition-colors ${
+      className={`sticky top-0 z-20 border-b border-gray-600 mb-4 transition-colors ease-in-out duration-300 ${
         isSticky ? "bg-gray-800 pt-2" : "bg-transparent"
       }`}
     >
-      <div className="flex flex-row">
+      <div className="flex flex-row space-x-2 px-2 overflow-x-auto scrollbar-hide justify-start sm:justify-center md:space-x-4">
         {["today", "this_week", "this_month", "this_year", "all_time"].map((value) => (
           <button
+            type="button"
             key={value}
-            className={`px-4 py-2 text-sm sm:text-base font-medium border-b-2 whitespace-nowrap ${
+            className={`px-3 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm md:px-6 md:py-3 md:text-lg font-medium border-b-4 whitespace-nowrap transition-all duration-300 ease-in-out transform ${
               filter === value
-                ? "text-blue-500 border-blue-500"
-                : "text-gray-400 border-transparent hover:text-white hover:border-gray-400"
+                ? "text-white border-gray-500 bg-gray-600 rounded-t scale-105"
+                : "text-gray-300 border-transparent hover:text-white hover:border-gray-400 hover:rounded-t hover:scale-105"
             }`}
             onClick={() => setFilter(value)}
           >

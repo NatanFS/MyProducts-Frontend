@@ -36,22 +36,22 @@ export default function CategorySearch({
         value={searchTerm}
         onFocus={() => setIsDropdownOpen(true)}
         onChange={(e) => {
-            const value = e.target.value;
-            setSearchTerm(value);
-            if (value.trim() === '') {
-              setCategoryId('');
-            }
-          }}
-        placeholder="Search categories"
-        className="block w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-blue-500 h-11"
+          const value = e.target.value;
+          setSearchTerm(value);
+          if (value.trim() === '') {
+            setCategoryId('');
+          }
+        }}
+        placeholder="Select category"
+        className="w-full sm:w-auto bg-gray-700 rounded-lg px-5 py-3 text-gray-300 placeholder-gray-500 shadow-inner focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
       />
       {isDropdownOpen && (
-        <div className="absolute top-full left-0 w-full bg-gray-800 border border-gray-600 rounded-lg max-h-40 overflow-y-auto mt-1 z-10">
+        <div className="absolute top-full left-0 w-full bg-gray-900 rounded-lg shadow-lg max-h-52 overflow-y-auto mt-2 z-20">
           {filteredCategories.map((category) => (
             <div
               key={category.id}
-              className={`px-4 py-2 cursor-pointer hover:bg-gray-700 ${
-                selectedCategoryId === category.id ? 'bg-gray-700' : ''
+              className={`px-4 py-2 cursor-pointer hover:bg-blue-600 hover:text-white transition ${
+                selectedCategoryId === category.id ? 'bg-blue-700 text-white' : 'text-gray-300'
               }`}
               onClick={() => {
                 setCategoryId(category.id);
@@ -63,7 +63,7 @@ export default function CategorySearch({
             </div>
           ))}
           {!filteredCategories.length && (
-            <div className="px-4 py-2 text-gray-400">No matching categories</div>
+            <div className="px-4 py-2 text-gray-400 text-sm">No matching categories</div>
           )}
         </div>
       )}

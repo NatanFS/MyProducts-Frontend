@@ -43,3 +43,20 @@ body {
   scrollbar-width: thin; 
   scrollbar-color: #374151 #1f2937; 
 }
+
+@layer components {
+  /* .title {
+    @apply font-bold font-montserrat text-3xl;
+  } */
+  /* .btn-primary {
+    @apply flex items-center justify-center transition-all duration-200 text-white text-base font-medium active:px-[16px] py-[8px] px-[18px] border border-white/5 rounded-md bg-authorify-blue hover:bg-white hover:text-authorify-blue whitespace-nowrap uppercase;
+  } */
+
+  .btn-primary {
+    @apply w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg shadow-lg transition duration-300 ease-in-out
+  }
+
+  /* .btn-secondary {
+    @apply flex items-center justify-center transition-all duration-200 text-white text-base font-medium active:px-[16px] py-[8px] px-[18px] border border-white/5 rounded-md bg-black/5 hover:bg-white hover:text-black whitespace-nowrap uppercase;
+  } */
+}

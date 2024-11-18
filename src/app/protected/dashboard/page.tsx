@@ -28,8 +28,8 @@ export default function Dashboard() {
   const { metrics, loading } = useDashboardMetrics(filter);
 
   return (
-    <div className="p-4 sm:p-6 lg:p-8 min-h-screen text-white">
-      <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">
+    <div className="p-4 sm:p-6 lg:p-8 min-h-screen text-white animate-fade-in">
+      <h1 className="text-4xl sm:text-5xl font-extrabold mb-6 text-center text-white drop-shadow-md">
         Dashboard
       </h1>
 
@@ -37,18 +37,16 @@ export default function Dashboard() {
 
       {loading || !metrics ? (
         <LoadingSpinner />
-      ): 
-      <>
-        <DashboardCards
-          metrics={metrics}
-        />
+      ) : (
+        <>
+          <DashboardCards metrics={metrics} />
 
-        <DashboardCharts
-          start_date={metrics?.start_date || '' }
-          end_date={metrics?.end_date || '' }
-        />
-      </>
-      }
+          <DashboardCharts
+            start_date={metrics?.start_date || ''}
+            end_date={metrics?.end_date || ''}
+          />
+        </>
+      )}
     </div>
   );
 }

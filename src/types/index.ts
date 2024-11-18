@@ -55,10 +55,10 @@ export interface DashboardCardProps {
     title: string;
     value: string | number | undefined;
     icon: React.ReactNode;
-    borderColor: string;
     gradient?: string;
     className?: string;
     message?: string;
+    style?: React.CSSProperties;
   }
   
 

@@ -19,21 +19,21 @@ export default function RegisterPage() {
     setFieldErrors({});
     setGlobalError(null);
     setSuccessMessage(null);
-  
+
     const formData = new FormData();
     formData.append('name', name);
     formData.append('email', email);
     formData.append('password', password);
     if (profileImage) {
-      formData.append('profile_image', profileImage); 
+      formData.append('profile_image', profileImage);
     }
-  
+
     try {
       await apiFetch('/users/', {
         method: 'POST',
         body: formData,
       });
-  
+
       setSuccessMessage('Registration successful! Redirecting to login...');
       setTimeout(() => {
         router.push('/login');
@@ -60,19 +60,21 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-800 to-gray-900 text-white">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-gray-800 to-gray-900 text-white animate-fade-in">
       <form
         onSubmit={handleSubmit}
         className="bg-gray-800 p-8 rounded-lg shadow-lg w-96 space-y-6 border border-gray-700"
       >
         <div className="flex items-center justify-center h-20 bg-gray-900 border-b border-gray-700 rounded-lg -mx-8 -mt-8 mb-6">
-        <div className="flex items-center ">
+          <div className="flex items-center">
             <img
               src="/appicon.png"
               alt="MyProducts Icon"
               className="h-16 w-16 -translate-x-2"
             />
-            <h1 className="text-2xl font-bold tracking-wide text-white -translate-x-2">MyProducts</h1>
+            <h1 className="text-2xl font-bold tracking-wide text-white -translate-x-2">
+              MyProducts
+            </h1>
           </div>
         </div>
 
@@ -105,15 +107,13 @@ export default function RegisterPage() {
               className="absolute inset-0 opacity-0"
               onChange={handleFileChange}
             />
-            
           </label>
         </div>
-        <div className='flex justify-center' >
+        <div className="flex justify-center">
           {fieldErrors.profile_image && (
-              <p className="text-red-500 text-sm mt-1">{fieldErrors.profile_image}</p>
+            <p className="text-red-500 text-sm mt-1">{fieldErrors.profile_image}</p>
           )}
         </div>
-        
 
         <div>
           <input
