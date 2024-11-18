@@ -11,6 +11,7 @@ import {
   CheckIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  ChartBarIcon,
 } from '@heroicons/react/24/outline';
 
 import CategorySelector from './CategorySelector';
@@ -74,7 +75,7 @@ export default function AddProductModal({
         });
         setFieldErrors(apiErrors);
       } else {
-        console.error('Unexpected error:', error.detail || error);
+        console.log('Unexpected error:', error.detail || error);
       }
     } finally {
       setLoading(false);
@@ -175,6 +176,23 @@ export default function AddProductModal({
               />
               {fieldErrors.stock && <p className="text-red-500 text-sm mt-1">{fieldErrors.stock}</p>}
             </div>
+
+            {/* Sales */}
+            <div className="shadow-md rounded-lg">
+              <label className="text-sm font-medium text-gray-300 mb-1 flex items-center gap-2">
+              <ChartBarIcon className="h-5 w-5 text-gray-300" />
+                Sales
+              </label>
+              <input
+                type="number"
+                placeholder="Sales"
+                className="block w-full bg-gray-800 rounded-lg px-4 py-3 text-gray-300 placeholder-gray-500 focus:ring-2 focus:ring-blue-500 transition-all shadow-inner"
+                value={sales}
+                onChange={(e) => setSales(Number(e.target.value) || '')}
+              />
+              {fieldErrors.sales && <p className="text-red-500 text-sm mt-1">{fieldErrors.sales}</p>}
+            </div>
+  
   
             {/* Product Code */}
             <div className="shadow-md rounded-lg">

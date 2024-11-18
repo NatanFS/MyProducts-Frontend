@@ -29,7 +29,7 @@ export const useProducts = (filters: {
       setProducts(data.products);
       setTotalPages(data.total_pages);
     } catch (error) {
-      console.error('Failed to fetch products', error);
+      console.log('Failed to fetch products', error);
     } finally {
       setLoading(false);
     }
@@ -52,7 +52,7 @@ export const useCategories = () => {
         const data = await apiFetch('/products/categories/');
         setCategories(data);
       } catch (error) {
-        console.error('Failed to fetch categories', error);
+        console.log('Failed to fetch categories', error);
       }
     };
 
