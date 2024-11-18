@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 export default function RegisterPage() {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [email, setEmail] = useState('');
   const [profileImage, setProfileImage] = useState<File | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -19,6 +20,14 @@ export default function RegisterPage() {
     setFieldErrors({});
     setGlobalError(null);
     setSuccessMessage(null);
+
+    if (password !== confirmPassword) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        confirmPassword: 'Passwords do not match',
+      }));
+      return;
+    }
 
     const formData = new FormData();
     formData.append('name', name);
@@ -163,6 +172,23 @@ export default function RegisterPage() {
           />
           {fieldErrors.password && (
             <p className="text-red-500 text-sm mt-1">{fieldErrors.password}</p>
+          )}
+        </div>
+
+        <div>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            className={`border p-3 w-full rounded-lg bg-gray-700 text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 ${
+              fieldErrors.confirmPassword
+                ? 'border-red-500 focus:ring-red-500'
+                : 'border-gray-600 focus:ring-blue-500'
+            }`}
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+          />
+          {fieldErrors.confirmPassword && (
+            <p className="text-red-500 text-sm mt-1">{fieldErrors.confirmPassword}</p>
           )}
         </div>
 

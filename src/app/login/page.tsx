@@ -22,7 +22,7 @@ export default function LoginPage() {
     setErrorMessage(null);
     try {
       await login(email, password);
-      router.push('/protected/products');
+      router.push('/protected/dashboard');
     } catch (error) {
       setErrorMessage((error as Error).message || 'Failed to login');
     }
