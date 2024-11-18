@@ -27,8 +27,6 @@ export default function Dashboard() {
   const [filter, setFilter] = useState<string>("all_time");
   const { metrics, loading } = useDashboardMetrics(filter);
 
-  if (loading || !metrics) return <LoadingSpinner />;
-
   return (
     <div className="p-4 sm:p-6 lg:p-8 min-h-screen text-white">
       <h1 className="text-3xl sm:text-4xl font-bold mb-6 text-center">
@@ -37,14 +35,20 @@ export default function Dashboard() {
 
       <DashboardStickyNav filter={filter} setFilter={setFilter} />
 
-      <DashboardCards
-        metrics={metrics}
-      />
+      {loading || !metrics ? (
+        <LoadingSpinner />
+      ): 
+      <>
+        <DashboardCards
+          metrics={metrics}
+        />
 
-      <DashboardCharts
-        start_date={metrics.start_date || '' }
-        end_date={metrics.end_date || '' }
-      />
+        <DashboardCharts
+          start_date={metrics?.start_date || '' }
+          end_date={metrics?.end_date || '' }
+        />
+      </>
+      }
     </div>
   );
 }

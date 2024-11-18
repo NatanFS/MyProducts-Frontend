@@ -17,7 +17,7 @@ const ProductTable: React.FC<ProductTableProps> = ({
             {['image', 'name', 'description', 'price', 'stock', 'sales', 'code', 'category'].map((col) => (
               <th
                 key={col}
-                className={`border border-gray-600 px-4 py-2 ${col !== 'image' ? 'cursor-pointer' : ''} ${
+                className={` px-4 py-2 ${col !== 'image' ? 'cursor-pointer' : ''} ${
                   orderBy === col ? 'bg-blue-600 text-white' : ''
                 }`}
                 onClick={col !== 'image' ? () => handleHeaderClick(col) : undefined}
@@ -37,22 +37,22 @@ const ProductTable: React.FC<ProductTableProps> = ({
               }`}
               onClick={() => setSelectedProduct(product)}
             >
-              <td className="border border-gray-600 px-4 py-2 text-center">
+              <td className=" px-4 py-2 text-center">
                 <img
                   src={product.image || '/default-placeholder.png'}
                   alt={product.name}
                   className="w-16 h-16 object-cover rounded-md mx-auto"
                 />
               </td>
-              <td className="border border-gray-600 px-4 py-2">{product.name}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.description}</td>
-              <td className="border border-gray-600 px-4 py-2">
+              <td className=" px-4 py-2">{product.name}</td>
+              <td className=" px-4 py-2">{product.description}</td>
+              <td className=" px-4 py-2">
                 {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(product.price)}
               </td>
-              <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.sales}</td>
-              <td className="border border-gray-600 px-4 py-2">{product.code}</td>
-              <td className="border border-gray-600 px-4 py-2">
+              <td className=" px-4 py-2">{product.stock}</td>
+              <td className=" px-4 py-2">{product.sales}</td>
+              <td className=" px-4 py-2">{product.code}</td>
+              <td className=" px-4 py-2">
                 {product.category ? product.category.name : 'No category'}
               </td>
             </tr>

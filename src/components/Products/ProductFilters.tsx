@@ -26,7 +26,7 @@ export default function Filters({
   };
 
   return (
-    <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full mb-4 md:justify-between">
+    <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full md:justify-between">
       <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4">
         <input
           type="text"

@@ -8,6 +8,8 @@ import useDebouncedValue from '../../hooks/useDebouncedValue';
 
 import LoadingSpinner from '@/components/Common/LoadingSpinner';
 import Pagination from '@/components/Common/Pagination';
+import AddIcon from '@mui/icons-material/Add';
+
 
 import {
   ProductCard,
@@ -70,12 +72,23 @@ export default function ProductsPage() {
       <h1 className="text-4xl font-bold mb-6 text-center">My Products</h1>
       <hr className="border-gray-600 mt-4 mb-6" />
 
-      <ProductFilters
-        categories={categories}
-        filters={filters}
-        onFilterChange={updateFilterField}
-        onSearch={() => updateFilters({ search: typingValue })}
-      />
+      
+      <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full mb-4 md:justify-between">
+        <ProductFilters
+          categories={categories}
+          filters={filters}
+          onFilterChange={updateFilterField}
+          onSearch={() => updateFilters({ search: typingValue })}
+        />
+
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition h-11 flex items-center justify-center sm:justify-end sm:self-start w-full sm:w-auto ml-auto md:ml-0"
+        >
+          <AddIcon />
+          <span className="hidden md:inline-block">Add Product</span>
+        </button>
+      </div>
 
       {isModalOpen && (
         <AddProductModal
