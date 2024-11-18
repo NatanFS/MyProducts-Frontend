@@ -10,7 +10,8 @@ import {
   PointElement,
   LineElement,
 } from "chart.js";
-import apiFetch from "../utils/api";
+import apiFetch from "../../utils/api";
+import LoadingSpinner from "../Common/LoadingSpinner";
 
 ChartJS.register(
   ArcElement,
@@ -22,16 +23,26 @@ ChartJS.register(
   LineElement
 );
 
-export default function SalesOverTimeChart() {
+interface SalesOverTimeChartProps {
+  start_date: string;
+  end_date: string;
+}
+
+export default function SalesOverTimeChart({
+  start_date,
+  end_date,
+}: SalesOverTimeChartProps) {
   const [chartData, setChartData] = useState<any>(null);
 
   useEffect(() => {
     fetchSalesData();
-  }, []);
+  }, [start_date, end_date]);
 
   const fetchSalesData = async () => {
     try {
-      const data = await apiFetch("/reports/sales_over_time");
+      const data = await apiFetch(
+        `/reports/sales_over_time?start_date=${start_date}&end_date=${end_date}`
+      );
       const labels = data.map((item: any) => item.date);
       const sales = data.map((item: any) => item.total_sales);
 
@@ -55,11 +66,11 @@ export default function SalesOverTimeChart() {
     }
   };
 
-  if (!chartData) return <div>Loading...</div>;
+  if (!chartData) return <LoadingSpinner />;
 
   return (
     <div className="flex justify-center items-center bg-gray-900 rounded-lg w-full h-max">
-      <div className=" py-4 px-4 w-full max-w-4xl">
+      <div className="py-4 px-4 w-full max-w-4xl">
         <h2 className="text-xl font-bold text-center mb-4 text-white">
           Sales Over Time
         </h2>

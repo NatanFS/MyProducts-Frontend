@@ -13,10 +13,15 @@ import {
 import apiFetch from "@/utils/api";
 import { ChartDataItem, ToggleChartProps } from "@/types";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
-
-
-
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
 export default function ToggleChart({
   endpoint,
@@ -75,8 +80,22 @@ export default function ToggleChart({
       {
         label: "Total",
         data: dataItems.map((item) => item.value),
-        backgroundColor: ["#ff6384", "#36a2eb", "#cc65fe", "#ffce56", "#00e676", "#ff5722"],
-        borderColor: ["#e53935", "#1e88e5", "#8e24aa", "#ffb300", "#00c853", "#d84315"],
+        backgroundColor: [
+          "#ff6384",
+          "#36a2eb",
+          "#cc65fe",
+          "#ffce56",
+          "#00e676",
+          "#ff5722",
+        ],
+        borderColor: [
+          "#e53935",
+          "#1e88e5",
+          "#8e24aa",
+          "#ffb300",
+          "#00c853",
+          "#d84315",
+        ],
         borderWidth: 1,
       },
     ],
@@ -103,7 +122,9 @@ export default function ToggleChart({
       <div className="mb-4 flex gap-2">
         <button
           className={`px-4 py-2 rounded-lg ${
-            chartType === "bar" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"
+            chartType === "bar"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-700 text-gray-300"
           }`}
           onClick={() => setChartType("bar")}
         >
@@ -111,7 +132,9 @@ export default function ToggleChart({
         </button>
         <button
           className={`px-4 py-2 rounded-lg ${
-            chartType === "pie" ? "bg-blue-600 text-white" : "bg-gray-700 text-gray-300"
+            chartType === "pie"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-700 text-gray-300"
           }`}
           onClick={() => setChartType("pie")}
         >
@@ -121,7 +144,9 @@ export default function ToggleChart({
 
       <div
         className={`flex flex-auto items-center justify-center ${
-          chartType === "pie" ? "h-[300px] lg:h-[400px] max-h-[500px]" : "h-[400px] lg:h-[400px] max-h-[500px]"
+          chartType === "pie"
+            ? "h-[300px] lg:h-[400px] max-h-[500px]"
+            : "h-[400px] lg:h-[400px] max-h-[500px]"
         }`}
       >
         {chartType === "pie" ? (
@@ -130,7 +155,6 @@ export default function ToggleChart({
           <Bar data={chartData} options={chartOptions} />
         )}
       </div>
-
     </div>
   );
 }

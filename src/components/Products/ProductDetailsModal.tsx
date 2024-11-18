@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import apiFetch from '../utils/api';
+import apiFetch from '../../utils/api';
 import CategorySelector from './CategorySelector';
 import { NumericFormat } from 'react-number-format';
 import { ProductDetailsModalProps } from '@/types';

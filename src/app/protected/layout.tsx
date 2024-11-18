@@ -1,7 +1,7 @@
 'use client';
 
 import { AuthProvider, AuthContext } from '../../context/AuthContext';
-import Sidebar from '../../components/Sidebar';
+import Sidebar from '../../components/Common/Sidebar';
 import { useContext } from 'react';
 import { useRouter } from 'next/navigation';
 

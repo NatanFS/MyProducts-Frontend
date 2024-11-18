@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import apiFetch from '../utils/api';
+import apiFetch from '@/utils/api';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { CategorySelectorProps } from '@/types';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Product, ProductTableProps } from '@/types';
+import { ProductTableProps } from '@/types';
 
 
 const ProductTable: React.FC<ProductTableProps> = ({

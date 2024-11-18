@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-const StickyNav = ({ filter, setFilter }: { filter: string, setFilter: (value: string) => void }) => {
+const DashboardStickyNav = ({ filter, setFilter }: { filter: string, setFilter: (value: string) => void }) => {
   const [isSticky, setIsSticky] = useState(false);
 
   useEffect(() => {
@@ -37,4 +37,4 @@ const StickyNav = ({ filter, setFilter }: { filter: string, setFilter: (value: s
   );
 };
 
-export default StickyNav;
+export default DashboardStickyNav;

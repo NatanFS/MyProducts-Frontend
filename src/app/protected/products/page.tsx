@@ -1,87 +1,66 @@
 'use client';
 
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { AuthContext } from '../../../context/AuthContext';
-import { useRouter } from 'next/navigation';
-import apiFetch from '../../../utils/api';
-import SearchIcon from '@mui/icons-material/Search';
-import AddIcon from '@mui/icons-material/Add';
-import ProductDetailsModal from '../../../components/ProductDetailsModal';
-import AddProductModal from '../../../components/AddProductModal';
-import CategorySearch from '@/components/CategorySearch';
-import { Product, Category, PaginatedResponse } from '@/types';
-import ProductCard from '@/components/ProductCard';
-import ProductTable from '@/components/ProductsTable';
 
+import { useProducts, useCategories } from '../../hooks/productsHooks';
+import useDebouncedValue from '../../hooks/useDebouncedValue';
+
+import LoadingSpinner from '@/components/Common/LoadingSpinner';
+import Pagination from '@/components/Common/Pagination';
+
+import {
+  ProductCard,
+  ProductDetailsModal,
+  ProductsTable,
+  AddProductModal,
+  ProductFilters,
+} from '@/components/Products';
+
+import { Product } from '@/types';
 
 export default function ProductsPage() {
   const authContext = useContext(AuthContext);
-  const router = useRouter();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [search, setSearch] = useState('');
-  const [category, setCategory] = useState<number | "">("");
-  const [orderBy, setOrderBy] = useState('name');
-  const [order, setOrder] = useState('asc');
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(15);
-  const [totalPages, setTotalPages] = useState(1);
+  const [filters, setFilters] = useState({
+    search: '',
+    category: "" as number | "",
+    orderBy: 'name',
+    order: 'asc',
+    page: 1,
+    pageSize: 15,
+  });
+
+  const { products, totalPages, loading, fetchProducts } = useProducts(filters);
+  const { categories, setCategories } = useCategories();
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const queryParams = new URLSearchParams({
-        ...(search && { search }),
-        ...(typeof category === "number" && { category: category.toString() }),
-        ...(orderBy && { order_by: orderBy }),
-        ...(order && { order }),
-        page: page.toString(),
-        page_size: pageSize.toString(),
-      });
-  
-      const data: PaginatedResponse = await apiFetch(`/products/?${queryParams}`);
-      setProducts(data.products);
-      setTotalPages(data.total_pages);
-    } catch (error) {
-      console.log('Failed to fetch products', error);
-    } finally {
-      setLoading(false);
-    }
+  const [typingValue, setTypingValue] = useState(filters.search);
+  const debouncedSearch = useDebouncedValue(typingValue, 300);
+
+  const updateFilterField = (field: string, value: any) => {
+    updateFilters({ [field]: value });
+  };  
+
+  const updateFilters = (updates: Partial<typeof filters>) => {
+    setFilters((prev) => ({ ...prev, ...updates }));
   };
 
-  const fetchCategories = async () => {
-    try {
-      const data = await apiFetch('/products/categories/');
-      setCategories(data);
-    } catch (error) {
-      console.log('Failed to fetch categories', error);
-    }
+  const handleFilterChange = (value: string) => {
+    setTypingValue(value);
   };
-
-  useEffect(() => {
-    fetchCategories();
-    fetchProducts();
-  }, [authContext, router, search, category, orderBy, order, page, pageSize]);
-  
-  const handleHeaderClick = (column: string) => {
-    if (orderBy === column) {
-      setOrder(order === 'asc' ? 'desc' : 'asc');
-    } else {
-      setOrderBy(column);
-      setOrder('asc');
-    }
-  };
-
+    
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
-      setPage(newPage);
+      updateFilters({ page: newPage });
     }
-  };
+  }; 
 
+  useEffect(() => {
+    updateFilters({ search: debouncedSearch });
+  }, [debouncedSearch]);
+  
   if (!authContext?.user) {
     return null;
   }
@@ -91,38 +70,12 @@ export default function ProductsPage() {
       <h1 className="text-4xl font-bold mb-6 text-center">My Products</h1>
       <hr className="border-gray-600 mt-4 mb-6" />
 
-      <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full mb-4 md:justify-between">
-      <div className="flex flex-1 flex-col sm:flex-row items-stretch sm:items-center gap-4">
-        <input
-          type="text"
-          placeholder="Search product"
-          className="bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 w-full sm:w-1/3 md:w-1/3 text-gray-300 placeholder-gray-400 shadow-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition h-11"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-
-        <CategorySearch
-          categories={categories}
-          selectedCategoryId={category}
-          setCategoryId={setCategory}
-        />
-
-        <button
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 shadow-md transition h-11 flex items-center justify-center gap-2 w-full sm:w-auto"
-          onClick={fetchProducts}
-        >
-          <SearchIcon className="text-white" />
-          <span className="hidden md:inline-block">Search</span>
-        </button>
-      </div>
-
-      <button
-        className="bg-green-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-green-700 transition h-11 flex items-center justify-center sm:justify-end sm:self-start w-full sm:w-auto ml-auto md:ml-0"
-        onClick={() => setIsModalOpen(true)}
-      >
-        <AddIcon />
-      </button>
-    </div>
+      <ProductFilters
+        categories={categories}
+        filters={filters}
+        onFilterChange={updateFilterField}
+        onSearch={() => updateFilters({ search: typingValue })}
+      />
 
       {isModalOpen && (
         <AddProductModal
@@ -142,76 +95,40 @@ export default function ProductsPage() {
         />
       )}
 
-      {loading ? (
-        <div className="flex flex-col items-center text-center mt-8">
-          <svg
-            className="animate-spin h-10 w-10 text-blue-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 0116 0v1H4v-1z"
-            ></path>
-          </svg>
-          <p className="mt-4 text-gray-400">Loading products...</p>
-        </div>
+      {loading ? (<LoadingSpinner message="Fetching products..." />
       ) : products.length === 0 ? (
-        <div className="text-center text-gray-400 mt-8">
-          No products found. Try adjusting your filters.
-        </div>
+        <div className="text-center text-gray-400 mt-8">No products found</div>
       ) : (
-        <>
-          <div className="grid grid-cols-1 gap-4 lg:hidden">
-            {products.map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                onClick={setSelectedProduct}
-              />
-            ))}
-          </div>
+      <>
+        <div className="grid grid-cols-1 gap-4 lg:hidden">
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              onClick={setSelectedProduct}
+            />
+          ))}
+        </div>
 
-          <ProductTable
-            products={products}
-            handleHeaderClick={handleHeaderClick}
-            orderBy={orderBy}
-            order={order}
-            setSelectedProduct={setSelectedProduct}
-          />
-        </>
+        <ProductsTable
+          products={products}
+          handleHeaderClick={(column) => {
+            updateFilterField('orderBy', column); 
+            updateFilterField('order', filters.order === 'asc' ? 'desc' : 'asc');
+          }}
+          orderBy={filters.orderBy}
+          order={filters.order}
+          setSelectedProduct={setSelectedProduct}
+        />
+      </>
       )}
 
       {products.length > 0 && (
-        <div className="flex justify-between items-center mt-6">
-          <button
-            className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={page <= 1}
-            onClick={() => handlePageChange(page - 1)}
-          >
-            Previous
-          </button>
-          <span>
-            Page {page} of {totalPages}
-          </span>
-          <button
-            className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-            disabled={page >= totalPages}
-            onClick={() => handlePageChange(page + 1)}
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          currentPage={filters.page}
+          totalPages={totalPages}
+          onPageChange={(newPage) => handlePageChange(newPage)}
+        />
       )}
     </div>
   );

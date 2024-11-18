@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import CategorySelector from './CategorySelector';
-import apiFetch from '../utils/api';
+import apiFetch from '../../utils/api';
 import { NumericFormat } from 'react-number-format';
 import { AddProductModalProps } from '@/types';
 
