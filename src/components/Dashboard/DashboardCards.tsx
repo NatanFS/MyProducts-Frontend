@@ -7,8 +7,8 @@ import DashboardCard from "@/components/Dashboard/DashboardCard";
 import { formatCurrency } from "@/utils/formatUtils";
 
 const generateSolidColors = (steps: number): string[] => {
-  const startColor = [102,101,241]; 
-  const endColor = [162,86,246];
+  const startColor = [54,161,234]; 
+  const endColor = [59, 130, 246];
 
   const interpolate = (start: number, end: number, factor: number) =>
     Math.round(start + (end - start) * factor);

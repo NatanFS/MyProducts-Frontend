@@ -184,8 +184,8 @@ export default function ToggleChart({
             type="button"
             className={`flex items-center px-5 py-2 rounded-full transition-all duration-300 shadow ${
               chartType === "bar"
-                ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white"
-                : "bg-gray-700 text-gray-300 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:text-white hover:shadow-lg"
+                ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white"
+                : "bg-gray-700 text-gray-300 hover:bg-gradient-to-r from-blue-600 to-blue-500 hover:text-white hover:shadow-lg"
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             onClick={() => setChartType("bar")}
             aria-pressed={chartType === "bar"}
@@ -198,8 +198,8 @@ export default function ToggleChart({
             type="button"
             className={`flex items-center px-5 py-2 rounded-full transition-all duration-300 shadow ${
               chartType === "pie"
-                ? "bg-gradient-to-r from-indigo-500 to-purple-500 text-white"
-                : "bg-gray-700 text-gray-300 hover:bg-gradient-to-r hover:from-indigo-500 hover:to-purple-500 hover:text-white hover:shadow-lg"
+                ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white"
+                : "bg-gray-700 text-gray-300 hover:bg-gradient-to-r from-blue-600 to-blue-500 hover:text-white hover:shadow-lg"
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
             onClick={() => setChartType("pie")}
             aria-pressed={chartType === "pie"}
