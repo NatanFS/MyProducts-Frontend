@@ -11,6 +11,7 @@ import AddProductModal from '../../../components/AddProductModal';
 import CategorySearch from '@/components/CategorySearch';
 import { Product, Category, PaginatedResponse } from '@/types';
 import ProductCard from '@/components/ProductCard';
+import ProductTable from '@/components/ProductsTable';
 
 
 export default function ProductsPage() {
@@ -46,7 +47,7 @@ export default function ProductsPage() {
       setProducts(data.products);
       setTotalPages(data.total_pages);
     } catch (error) {
-      console.error('Failed to fetch products', error);
+      console.log('Failed to fetch products', error);
     } finally {
       setLoading(false);
     }
@@ -57,7 +58,7 @@ export default function ProductsPage() {
       const data = await apiFetch('/products/categories/');
       setCategories(data);
     } catch (error) {
-      console.error('Failed to fetch categories', error);
+      console.log('Failed to fetch categories', error);
     }
   };
 
@@ -181,54 +182,13 @@ export default function ProductsPage() {
             ))}
           </div>
 
-          <div className="hidden lg:block overflow-x-auto rounded-lg bg-gray-800 border border-gray-700 shadow-lg">
-            <table className="min-w-full border-collapse text-left text-gray-300">
-              <thead className="bg-gray-700">
-                <tr>
-                  {['image', 'name', 'description', 'price', 'stock', 'sales', 'code', 'category'].map((col) => (
-                    <th
-                      key={col}
-                      className={`border border-gray-600 px-4 py-2 ${
-                        col !== 'image' ? 'cursor-pointer' : ''
-                      } ${orderBy === col ? 'bg-blue-600 text-white' : ''}`}
-                      onClick={col !== 'image' ? () => handleHeaderClick(col) : undefined}
-                    >
-                      {col.charAt(0).toUpperCase() + col.slice(1)}{' '}
-                      {orderBy === col && col !== 'image' && (order === 'asc' ? '▲' : '▼')}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product, index) => (
-                  <tr
-                    key={product.id}
-                    className={`hover:bg-gray-700 transition cursor-pointer ${
-                      index % 2 === 0 ? 'bg-gray-800' : 'bg-gray-900'
-                    }`}
-                    onClick={() => setSelectedProduct(product)}
-                  >
-                    <td className="border border-gray-600 px-4 py-2 text-center">
-                      <img
-                        src={product.image || '/default-placeholder.png'}
-                        alt={product.name}
-                        className="w-16 h-16 object-cover rounded-md mx-auto"
-                      />
-                    </td>
-                    <td className="border border-gray-600 px-4 py-2">{product.name}</td>
-                    <td className="border border-gray-600 px-4 py-2">{product.description}</td>
-                    <td className="border border-gray-600 px-4 py-2">${product.price.toFixed(2)}</td>
-                    <td className="border border-gray-600 px-4 py-2">{product.stock}</td>
-                    <td className="border border-gray-600 px-4 py-2">{product.sales}</td>
-                    <td className="border border-gray-600 px-4 py-2">{product.code}</td>
-                    <td className="border border-gray-600 px-4 py-2">
-                      {product.category ? product.category.name : 'No category'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ProductTable
+            products={products}
+            handleHeaderClick={handleHeaderClick}
+            orderBy={orderBy}
+            order={order}
+            setSelectedProduct={setSelectedProduct}
+          />
         </>
       )}
 

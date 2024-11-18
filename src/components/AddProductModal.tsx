@@ -25,25 +25,9 @@ export default function AddProductModal({
   
     const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
-  
-      const errors: Record<string, string> = {};
-  
-      if (!name) errors.name = 'Product name is required.';
-      if (!price) errors.price = 'Price is required.';
-      if (!description) errors.description = 'Description is required.';
-      if (!stock) errors.stock = 'Stock is required.';
-      if (!sales) errors.sales = 'Sales is required.';
-      if (!code) errors.code = 'Product code is required.';
-      if (!categoryId) errors.category_id = 'Category is required.';
-  
-      if (Object.keys(errors).length > 0) {
-        setFieldErrors(errors);
-        return;
-      }
-  
-      setLoading(true);
       setFieldErrors({});
-  
+      setLoading(true);
+    
       try {
         const formData = new FormData();
         formData.append('name', name);
@@ -56,16 +40,24 @@ export default function AddProductModal({
         if (image) {
           formData.append('image', image);
         }
-  
+    
         await apiFetch('/products/', {
           method: 'POST',
           body: formData,
         });
-  
-        fetchProducts();
-        onCancel();
-      } catch (error) {
-        console.error('Failed to save product:', error);
+    
+        fetchProducts(); 
+        onCancel(); 
+      } catch (error: any) {
+        if (error.errors) {
+          const apiErrors: Record<string, string> = {};
+          error.errors.forEach((err: { field: string; message: string }) => {
+            apiErrors[err.field] = err.message;
+          });
+          setFieldErrors(apiErrors);
+        } else {
+          console.log('Unexpected error:', error.detail || error);
+        }
       } finally {
         setLoading(false);
       }
@@ -170,6 +162,7 @@ export default function AddProductModal({
                 setCategories={setCategories}
                 setCategoryId={setCategoryId}
               />
+              {fieldErrors.category_id && <p className="text-red-500 text-sm mb-2">{fieldErrors.category_id}</p>}
   
               <label className="block text-sm font-medium text-gray-300 mb-1 mt-3">Product Image</label>
               <div className="relative">

@@ -35,9 +35,17 @@ export default function LoginPage() {
         className="bg-gray-800 p-8 rounded-lg shadow-lg w-96 space-y-6 border border-gray-700"
       >
         <div className="flex items-center justify-center h-20 bg-gray-900 border-b border-gray-700 rounded-lg -mx-8 -mt-8 mb-6">
-          <h1 className="text-2xl font-bold tracking-wide">Login - MyProducts</h1>
+        <div className="flex items-center ">
+            <img
+              src="/appicon.png"
+              alt="MyProducts Icon"
+              className="h-16 w-16 -translate-x-2"
+            />
+            <h1 className="text-2xl font-bold tracking-wide text-white -translate-x-2">MyProducts</h1>
+          </div>
         </div>
 
+        <h2 className="text-xl font-bold tracking-wide text-white">Login</h2>
         {errorMessage && (
           <p className="text-red-500 text-sm text-center">{errorMessage}</p>
         )}

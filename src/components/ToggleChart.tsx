@@ -65,7 +65,7 @@ export default function ToggleChart({
         }))
       );
     } catch (error) {
-      console.error(`Failed to fetch data from ${endpoint}:`, error);
+      console.log(`Failed to fetch data from ${endpoint}:`, error);
     }
   };
 
@@ -119,13 +119,18 @@ export default function ToggleChart({
         </button>
       </div>
 
-      <div className="flex flex-auto h-[300px] lg:h-[500px] items-center justify-center">
+      <div
+        className={`flex flex-auto items-center justify-center ${
+          chartType === "pie" ? "h-[300px] lg:h-[400px] max-h-[500px]" : "h-[400px] lg:h-[400px] max-h-[500px]"
+        }`}
+      >
         {chartType === "pie" ? (
           <Pie data={chartData} options={chartOptions} />
         ) : (
           <Bar data={chartData} options={chartOptions} />
         )}
       </div>
+
     </div>
   );
 }

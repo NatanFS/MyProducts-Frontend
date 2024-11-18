@@ -51,7 +51,7 @@ export default function SalesOverTimeChart() {
         ],
       });
     } catch (error) {
-      console.error("Error fetching sales data:", error);
+      console.log("Error fetching sales data:", error);
     }
   };
 
@@ -64,7 +64,7 @@ export default function SalesOverTimeChart() {
           Sales Over Time
         </h2>
         <div className="relative w-full">
-          <div className="h-80 sm:h-96 md:h-[500px] lg:h-[600px] w-full">
+          <div className="h-80 sm:h-96 md:h-[400px] lg:h-[500px] w-full">
             <Line
               data={chartData}
               options={{

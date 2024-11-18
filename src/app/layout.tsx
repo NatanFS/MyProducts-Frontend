@@ -2,8 +2,8 @@ import './globals.css';
 import Providers from '../components/Providers';
 
 export const metadata = {
-  title: 'Trello Clone',
-  description: 'A clone of Trello application',
+  title: 'MyProducts',
+  description: 'Inventory management system for small businesses',
 };
 
 export default function RootLayout({

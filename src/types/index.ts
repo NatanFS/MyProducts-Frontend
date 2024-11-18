@@ -103,3 +103,12 @@ export interface AuthContextProps {
     login: (username: string, password: string) => Promise<void>;
     logout: () => void;
 }
+
+export interface ProductTableProps {
+    products: Product[];
+    handleHeaderClick: (column: string) => void;
+    orderBy: string;
+    order: string;
+    setSelectedProduct: (product: Product) => void;
+  }
+  

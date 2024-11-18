@@ -10,7 +10,7 @@ export default function HomePage() {
 
   useEffect(() => {
     if (authContext?.user) {
-      router.push('/protected/products');
+      router.push('/protected/dashboard');
     } else {
       router.push('/login');
     }

@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           const userData = await apiFetch('/users/me');
           setUser(userData);
         } catch (error) {
-          console.error('Failed to fetch user data', error);
+          console.log('Failed to fetch user data', error);
           logout();
         }
       }

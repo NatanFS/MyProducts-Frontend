@@ -32,7 +32,7 @@ export default function CategorySelector({
       setSearchTerm(addedCategory.name);
       setIsDropdownOpen(false);
     } catch (error: any) {
-      console.error('Error adding category:', error);
+      console.log('Error adding category:', error);
       throw error;
     }
   };
@@ -47,7 +47,7 @@ export default function CategorySelector({
       setCategoryId('');
       setSearchTerm('');
     } catch (error: any) {
-      console.error('Error deleting category:', error);
+      console.log('Error deleting category:', error);
     }
   };
 

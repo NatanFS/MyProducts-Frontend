@@ -39,7 +39,7 @@ export default function Dashboard() {
       );
       setMetrics(data);
     } catch (error) {
-      console.error("Failed to fetch dashboard metrics:", error);
+      console.log("Failed to fetch dashboard metrics:", error);
     }
   };
 
