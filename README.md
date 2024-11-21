@@ -1,12 +1,17 @@
 # MyProducts
 
-[[Vercel](https://vercelbadge.vercel.app/api/my-products-frontend/vercel)](https://my-products-frontend.vercel.app)
-
 ## Description
 
 MyProducts is a web application built with Next.js and React that allows users to manage and view their products efficiently.
 
-## Installation
+## Test it out! 
+
+1. Open the application in your browser at [my-products-frontend.vercel.app](https://my-products-frontend.vercel.app).
+2. Sign up or log in to your account.
+3. Add, edit, or delete products as needed.
+4. View detailed information about each product.
+
+## Run application locally
 
 To get started with MyProducts, follow these steps:
 
@@ -27,12 +32,3 @@ To get started with MyProducts, follow these steps:
     ```
 
 4. Open your browser and navigate to `http://localhost:3000` to see the application in action.
-
-## Usage
-
-To use MyProducts, follow these steps:
-
-1. Open the application in your browser at [my-products-frontend.vercel.app](https://my-products-frontend.vercel.app).
-2. Sign up or log in to your account.
-3. Add, edit, or delete products as needed.
-4. View detailed information about each product.
