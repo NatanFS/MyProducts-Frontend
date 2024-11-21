@@ -47,10 +47,6 @@ export default function ProductsPage() {
   const updateFilters = (updates: Partial<typeof filters>) => {
     setFilters((prev) => ({ ...prev, ...updates }));
   };
-
-  const handleFilterChange = (value: string) => {
-    setTypingValue(value);
-  };
     
   const handlePageChange = (newPage: number) => {
     if (newPage > 0 && newPage <= totalPages) {
