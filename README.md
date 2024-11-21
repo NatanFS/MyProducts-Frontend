@@ -1,6 +1,6 @@
 # MyProducts
 
-[![Vercel](https://vercelbadge.vercel.app/api/my-products-frontend/vercel)](https://my-products-frontend.vercel.app)
+[[Vercel](https://vercelbadge.vercel.app/api/my-products-frontend/vercel)](https://my-products-frontend.vercel.app)
 
 ## Description
 
